@@ -27,7 +27,6 @@ export default class Layout extends Component {
         <Head/>
         <Header path={path} user={user}/>
         <div className="l-content">
-          {/*<h4>user: {JSON.stringify(user)}</h4>*/}
           {this.content && this.content()}
         </div>
         <Footer/>
