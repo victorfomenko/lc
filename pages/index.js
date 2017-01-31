@@ -18,17 +18,40 @@ export default class Index extends Layout {
     return { pictures }
   }
 
+
   onClickLoadFile(){
     document.querySelector('input[type="file"]').click();
   }
 
+
   componentDidMount(){
-    $('.gallery').collagePlus({
-      'fadeSpeed'     : 500,
-      'targetHeight'  : 200,
-    });
-    $('.gallery').collageCaption({
-      'background'      : ""
+    this.drowGallery();
+  }
+
+
+  drowGallery(){
+    var collage = () => {
+      $('.gallery').collagePlus({
+        'fadeSpeed'     : 500,
+        'targetHeight'  : 200,
+      });
+    };
+
+    var caption = () => {
+      $('.gallery').collageCaption({
+        'background'      : ""
+      });
+    };
+
+
+    collage();
+    caption();
+
+
+    var resizeTimer = null;
+    $(window).bind('resize', () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(collage, 200);
     });
   }
 
