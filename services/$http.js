@@ -1,10 +1,14 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-const host = process.env.HOST || 'http://lc.lan' || 'https://lovecanvas.ru';
+const apiHost = process.env.API_HOST || ''; // by default host from request
 
 export default {
+  host: '',
+
   post: function (url, data, sid) {
+    const host = apiHost || this.host;
+
     return fetch(host + url, {
       method: 'POST',
       body: data,

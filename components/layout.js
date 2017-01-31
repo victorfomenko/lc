@@ -3,6 +3,7 @@ import cookie from 'cookie';
 
 //services
 import auth from '../services/authService';
+import $http from '../services/$http';
 
 // components
 import Head from './head';
@@ -12,7 +13,11 @@ import Modals from './modals';
 
 export default class Layout extends Component {
   static async getInitialProps({pathname, req}) {
-    const cookies = cookie.parse(req ? req.headers.cookie : document.cookie);
+    if (req) {
+      $http.host = req.protocol + '://' + req.get('host');
+    }
+
+    const cookies = cookie.parse(req ? (req.headers.cookie || '') : document.cookie);
     const sid = cookies['PHPSESSID'];
 
     const user = await auth.getProfile(sid);
