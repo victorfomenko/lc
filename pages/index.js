@@ -7,6 +7,7 @@ import api from '../services/appService';
 
 //components
 import Layout from '../components/layout';
+import Gallery from '../components/gallery';
 
 
 const bannerNumber = Math.floor((Math.random() * 5) + 1);
@@ -95,18 +96,6 @@ export default class Index extends Layout {
   }
 
   content(){
-    const galleryPics = (this.state.pictures || []).map( (pic, index) => {
-      return(
-        <Link key={index} href={`/gallery/${pic.seourl}`}>
-          <a className="gallery__wrapper"
-             data-caption={`<strong class='caption__content__name'>${pic.name}</strong><span class='caption__content__author'>${pic.author}</span><span class='caption__content__price'>От 220 <span class='form__price__rouble m-rubble'>i</span></span>`}>
-            <i className='heart'/>
-            <img src={`/static${pic.preview}`} width={pic.width} height={pic.height} alt={pic.name}/>
-          </a>
-        </Link>
-      )
-    });
-
     return(
       <div>
         <section className={`banner banner--item-${bannerNumber}`}>
@@ -123,9 +112,7 @@ export default class Index extends Layout {
                 <div className="m-separator m-separator--after-title"></div>
               </div>
             </div>
-            <div className="gallery">
-              {galleryPics}
-            </div>
+            <Gallery pictures={this.state.pictures}/>
           </div>
           <p className="m-text_center">
             <Link href="/gallery"><a className="btn btn-lg btn-helper">Посмотреть еще</a></Link>
