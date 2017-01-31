@@ -13,9 +13,18 @@ const bannerNumber = Math.floor((Math.random() * 5) + 1);
 
 export default class Index extends Layout {
 
-  static async getInitialProps(){
+  constructor() {
+    super();
+    this.state = {
+      pictures: []
+    }
+  }
+
+  async getInitialProps(){
     const pictures = await api.getImageList(15);
-    return { pictures }
+    this.setState( ()=>{
+      return { pictures }
+    });
   }
 
 
@@ -25,9 +34,11 @@ export default class Index extends Layout {
 
 
   componentDidMount(){
-    this.drawGallery();
-  }
+    this.getInitialProps().then(()=>{
+      this.drawGallery();
+    });
 
+  }
 
   drawGallery(){
     var collage = () => {
@@ -84,7 +95,7 @@ export default class Index extends Layout {
   }
 
   content(){
-    const galleryPics = (this.props.pictures || []).map( (pic, index) => {
+    const galleryPics = (this.state.pictures || []).map( (pic, index) => {
       return(
         <Link key={index} href={`/gallery/${pic.seourl}`}>
           <a className="gallery__wrapper"
