@@ -177,7 +177,7 @@ api.getImageList = function (limit) {
   return $http.post('/ajax/getListOfPic.php', limit)
     .then(function (data) {
       if (typeof  data === 'object') {
-        api.pictures = data;
+        return data;
       }
     })
     .catch(function (data) {

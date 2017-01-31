@@ -6569,7 +6569,8 @@ h3 {
     padding-left: 50px; } }
 html,
 body,
-body > div {
+body > div:first-child,
+body div[data-reactroot] {
   height: 100%;
   min-height: 100%; }
 

@@ -8,13 +8,30 @@ import api from '../services/appService';
 //components
 import Layout from '../components/layout';
 
+
 const bannerNumber = Math.floor((Math.random() * 5) + 1);
 
 export default class Index extends Layout {
 
+  static async getInitialProps(){
+    const pictures = await api.getImageList(15);
+    return { pictures }
+  }
+
   onClickLoadFile(){
     document.querySelector('input[type="file"]').click();
   }
+
+  componentDidMount(){
+    $('.gallery').collagePlus({
+      'fadeSpeed'     : 500,
+      'targetHeight'  : 200,
+    });
+    $('.gallery').collageCaption({
+      'background'      : ""
+    });
+  }
+
 
   handleFileSelect(e){
     let file = e.target.files; // FileList object
@@ -44,6 +61,18 @@ export default class Index extends Layout {
   }
 
   content(){
+    const galleryPics = (this.props.pictures || []).map( (pic, index) => {
+      return(
+        <Link key={index} href={`/gallery/${pic.seourl}`}>
+          <a className="gallery__wrapper"
+             data-caption={`<strong class='caption__content__name'>${pic.name}</strong><span class='caption__content__author'>${pic.author}</span><span class='caption__content__price'>От 220 <span class='form__price__rouble m-rubble'>i</span></span>`}>
+            <i className='heart'/>
+            <img src={`/static${pic.preview}`} width={pic.width} height={pic.height} alt={pic.name}/>
+          </a>
+        </Link>
+      )
+    });
+
     return(
       <div>
         <section className={`banner banner--item-${bannerNumber}`}>
@@ -61,10 +90,7 @@ export default class Index extends Layout {
               </div>
             </div>
             <div className="gallery">
-              {/*<a href="/gallery/{{pic.seourl}}" className="gallery__wrapper" ng-repeat="pic in pictures" data-caption="<strong className='caption__content__name'>{{pic.name}}</strong><span className='caption__content__author'>{{pic.author}}</span><span className='caption__content__price'>От 220 <span className='form__price__rouble m-rubble'>i</span></span>">*/}
-                {/*<i className='heart'/>*/}
-                {/*<img ng-src="{{pic.preview}}" width="{{pic.width}}" height="{{pic.height}}" alt="{{pic.name}}"/>*/}
-              {/*</a>*/}
+              {galleryPics}
             </div>
           </div>
           <p className="m-text_center">
