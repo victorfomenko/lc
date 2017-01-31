@@ -25,11 +25,11 @@ export default class Index extends Layout {
 
 
   componentDidMount(){
-    this.drowGallery();
+    this.drawGallery();
   }
 
 
-  drowGallery(){
+  drawGallery(){
     var collage = () => {
       $('.gallery').collagePlus({
         'fadeSpeed'     : 500,
