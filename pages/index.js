@@ -13,9 +13,12 @@ import Gallery from '../components/gallery';
 const bannerNumber = Math.floor((Math.random() * 5) + 1);
 
 export default class Index extends Layout {
-
-
-
+  static async getInitialProps(obj) {
+    return {
+      ...await super.getInitialProps(obj),
+      pictures: await Gallery.getPictures(15)
+    }
+  }
 
   onClickLoadFile(){
     document.querySelector('input[type="file"]').click();
@@ -50,6 +53,8 @@ export default class Index extends Layout {
   }
 
   content(){
+    const {pictures} = this.props;
+
     return(
       <div>
         <section className={`banner banner--item-${bannerNumber}`}>
@@ -66,7 +71,7 @@ export default class Index extends Layout {
                 <div className="m-separator m-separator--after-title"></div>
               </div>
             </div>
-            <Gallery size={15}/>
+            <Gallery pictures={pictures}/>
           </div>
           <p className="m-text_center">
             <Link href="/gallery"><a className="btn btn-lg btn-helper">Посмотреть еще</a></Link>

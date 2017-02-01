@@ -6,19 +6,7 @@ import $http from '../../services/$http'
 // components
 import Layout from '../../components/layout';
 import ParamLink from '../../components/paramLink';
-
-// Here we apply the actual CollagePlus plugin
-function collage() {
-  $('.gallery').collagePlus({
-    'fadeSpeed': 1000,
-    'targetHeight': 250,
-    'allowPartialLastRow': true
-  });
-}
-
-function caption() {
-  $('.gallery').collageCaption();
-}
+import Gallery from '../../components/gallery';
 
 export default class User extends Layout {
   static async getInitialProps(obj) {
@@ -47,27 +35,6 @@ export default class User extends Layout {
 
         return data;
       });
-  }
-
-  componentDidMount() {
-    this.gallery();
-  }
-
-  gallery() {
-    // This is just for the case that the browser window is resized
-    var resizeTimer = null;
-    $(window).bind('resize', function () {
-      // hide all the images until we resize them
-      $('.gallery .Image_Wrapper').css("opacity", 0);
-      // set a timer to re-apply the plugin
-      if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(collage, 200);
-    });
-
-    collage();
-    caption();
-
-    // todo destroy plugins
   }
 
   content() {
@@ -109,18 +76,7 @@ export default class User extends Layout {
         <section className="container m-padding-main">
           <div className="container">
             <div className="gallery-section">
-              <div className="gallery">
-                {
-                  (pictures || []).map(pic => (
-                    <ParamLink key={pic.seourl} url='/gallery/:pictureId' params={{pictureId: pic.seourl}}>
-                      <a className="gallery__wrapper"
-                         data-caption={`<strong className='caption__content__name'>${pic.name}</strong><span className='caption__content__author'>${pic.author}</span>`}>
-                        <img src={'/static' + pic.preview} width={pic.width} height={pic.height} alt={pic.name}/>
-                      </a>
-                    </ParamLink>
-                  ))
-                }
-              </div>
+              <Gallery pictures={pictures}/>
             </div>
           </div>
         </section>

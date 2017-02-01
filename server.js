@@ -12,7 +12,7 @@ app.prepare()
     const server = express();
 
     // custom routing
-    server.get('/gallery/:picture', (req, res) => {
+    server.get('/gallery/:pictureUrl', (req, res) => {
       return app.render(req, res, '/gallery', Object.assign({}, req.params, req.query));
     });
 
