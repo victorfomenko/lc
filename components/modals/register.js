@@ -44,7 +44,7 @@ export default ()=>{
               <div className="main-error alert alert-error hide"></div>
 
               <div className="form__row m-text_center">
-                <img src="./static/img/logo.png" alt="Logo" style={{width: '40px'}}/>
+                <img src="/static/img/logo.png" alt="Logo" style={{width: '40px'}}/>
               </div>
 
               <div className="form__row form__row--is_required">

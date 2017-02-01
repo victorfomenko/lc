@@ -16,6 +16,10 @@ app.prepare()
       return app.render(req, res, '/gallery', Object.assign({}, req.params, req.query));
     });
 
+    server.get('/user/:userUrl', (req, res) => {
+      return app.render(req, res, '/user', Object.assign({}, req.params, req.query));
+    });
+
     if (dev) {
       const httpProxy = require('http-proxy');
       const proxy = httpProxy.createProxyServer({

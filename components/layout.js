@@ -22,20 +22,20 @@ export default class Layout extends Component {
 
     const user = await auth.getProfile(sid);
 
-    return {path: pathname, user: user}
+    return {path: pathname, head: {}, session: {id: sid, user}}
   }
 
   render() {
-    const {path, user} = this.props;
+    const {path, session, head} = this.props;
     return (
       <div className="l-body">
-        <Head/>
-        <Header path={path} user={user}/>
+        <Head head={head}/>
+        <Header path={path} user={session.user}/>
         <div className="l-content">
           {this.content && this.content()}
         </div>
         <Footer/>
-        <Modals user={user}/>
+        <Modals user={session.user}/>
       </div>
     )
   }

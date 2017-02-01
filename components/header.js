@@ -2,7 +2,8 @@ import React from 'react';
 import cn from 'classnames';
 import Link from 'next/link';
 
-import AjaxForm from './ajaxForm'
+import AjaxForm from './ajaxForm';
+import ParamLink from './paramLink';
 
 
 export default ({path, user}) => {
@@ -34,7 +35,7 @@ export default ({path, user}) => {
         <div>
           <AjaxForm className="ajax" method="post" action="/ajax/ajax.php">
             <input type="hidden" name="act" value="logout"/>
-            <Link href={`/${currentUser.url}`}><a>{currentUser.name}</a></Link>
+            <ParamLink url='/user/:userUrl' params={{userUrl: currentUser.url}} title={currentUser.name}/>
             <button className="btn btn-link header__flex__item__email" type="submit">выход</button>
           </AjaxForm>
         </div>
@@ -45,7 +46,7 @@ export default ({path, user}) => {
         <div>
           <AjaxForm className="ajax" method="post" action="/ajax/ajax.php">
             <input type="hidden" name="act" value="logout"/>
-            <span>admin: <Link href={`/${currentUser.url}`}><a>{currentUser.name}</a></Link></span>
+            <span>admin: <ParamLink url='/user/:userUrl' params={{userUrl: currentUser.url}} title={currentUser.name}/></span>
             <button className="btn btn-link header__flex__item__email" type="submit">выход</button>
           </AjaxForm>
         </div>
