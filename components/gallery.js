@@ -1,10 +1,64 @@
 import React, {Component} from 'react';
 import Link from 'next/link';
 
+import api from '../services/appService';
+
 export default class Gallery extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+      pictures: []
+    }
+  }
+
+  async getInitialProps(){
+    const pictures = await api.getImageList(this.props.size);
+    this.setState( ()=>{
+      return { pictures }
+    });
+  }
+
+  componentDidMount(){
+    this.getInitialProps();
+  }
+
+  componentDidUpdate(){
+    this.drawGallery();
+  }
+
+  drawGallery(){
+    let collage = () => {
+      $('.gallery').collagePlus({
+        'fadeSpeed'     : 500,
+        'targetHeight'  : 200,
+      });
+    };
+
+    let caption = () => {
+      $('.gallery').collageCaption({
+        'background'      : ""
+      });
+    };
+
+
+    collage();
+    caption();
+
+
+    let resizeTimer = null;
+    $(window).bind('resize', () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(collage, 200);
+    });
+  }
+
+  componentWillUnmount(){
+    $(window).unbind('resize')
+  }
+
   render(){
-    const gallery = (this.props.pictures || []).map( (pic, index) => {
+    const gallery = (this.state.pictures || []).map( (pic, index) => {
       return (
         <Link key={index} href='/gallery' as={`/gallery/${pic.seourl}`}>
           <a className="gallery__wrapper"

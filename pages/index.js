@@ -14,57 +14,11 @@ const bannerNumber = Math.floor((Math.random() * 5) + 1);
 
 export default class Index extends Layout {
 
-  constructor() {
-    super();
-    this.state = {
-      pictures: []
-    }
-  }
 
-  async getInitialProps(){
-    const pictures = await api.getImageList(15);
-    this.setState( ()=>{
-      return { pictures }
-    });
-  }
 
 
   onClickLoadFile(){
     document.querySelector('input[type="file"]').click();
-  }
-
-
-  componentDidMount(){
-    this.getInitialProps().then(()=>{
-      this.drawGallery();
-    });
-
-  }
-
-  drawGallery(){
-    var collage = () => {
-      $('.gallery').collagePlus({
-        'fadeSpeed'     : 500,
-        'targetHeight'  : 200,
-      });
-    };
-
-    var caption = () => {
-      $('.gallery').collageCaption({
-        'background'      : ""
-      });
-    };
-
-
-    collage();
-    caption();
-
-
-    var resizeTimer = null;
-    $(window).bind('resize', () => {
-      if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(collage, 200);
-    });
   }
 
 
@@ -112,7 +66,7 @@ export default class Index extends Layout {
                 <div className="m-separator m-separator--after-title"></div>
               </div>
             </div>
-            <Gallery pictures={this.state.pictures}/>
+            <Gallery size={15}/>
           </div>
           <p className="m-text_center">
             <Link href="/gallery"><a className="btn btn-lg btn-helper">Посмотреть еще</a></Link>
