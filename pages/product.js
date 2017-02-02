@@ -115,6 +115,7 @@ export default class ProductPage extends Layout {
     return {
       ...baseProps,
       picture,
+      pictureUrl,
       onServer: !!req
     }
   }
@@ -130,7 +131,8 @@ export default class ProductPage extends Layout {
   }
 
   content() {
-    const {$scope} = this;
+    const {$scope, props} = this;
+    const {pictureUrl} = props;
 
     return (
       <section className={"container m-padding-main " + $scope.mainClass}>
@@ -159,7 +161,7 @@ export default class ProductPage extends Layout {
                 </p>
               </div>
               <hr/>
-              <form className="form">
+              <form action={"/shipping/" + pictureUrl} className="form">
                 <div className="form__samples row">
                   {
                     $scope.productStates.map(product=> (
