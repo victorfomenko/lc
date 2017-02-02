@@ -20,10 +20,10 @@ export default class Gallery extends Component {
     });
   }
 
-  onResize() {
+  onResize = ()=> {
     if (this.resizeTimer) clearTimeout(this.resizeTimer);
     this.resizeTimer = setTimeout(this.collage, 200);
-  }
+  };
 
   drawGallery(){
     this.collage();
@@ -32,7 +32,7 @@ export default class Gallery extends Component {
       'background'      : ""
     });
 
-    $(window).bind('resize', this.onResize.bind(this));
+    $(window).bind('resize', this.onResize);
   }
 
   componentWillUnmount(){
