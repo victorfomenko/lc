@@ -13,7 +13,7 @@ app.prepare()
 
     // custom routing
     server.get('/gallery/:pictureUrl', (req, res) => {
-      return app.render(req, res, '/gallery', Object.assign({}, req.params, req.query));
+      return app.render(req, res, '/product', Object.assign({}, req.params, req.query));
     });
 
     server.get('/user/:userUrl', (req, res) => {
