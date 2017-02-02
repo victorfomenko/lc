@@ -32,7 +32,7 @@ export default class Gallery extends Component {
       'background'      : ""
     });
 
-    $(window).bind('resize', this.onResize);
+    $(window).bind('resize', this.onResize.bind(this));
   }
 
   componentWillUnmount(){
