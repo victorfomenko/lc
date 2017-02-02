@@ -14,9 +14,17 @@ const bannerNumber = Math.floor((Math.random() * 5) + 1);
 
 export default class Index extends Layout {
   static async getInitialProps(obj) {
+    const [
+      baseProps,
+      pictures
+    ] = await Promise.all([
+      super.getInitialProps(obj),
+      Gallery.getPictures(15)
+    ]);
+
     return {
-      ...await super.getInitialProps(obj),
-      pictures: await Gallery.getPictures(15)
+      ...baseProps,
+      pictures
     }
   }
 

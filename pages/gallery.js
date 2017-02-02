@@ -5,9 +5,17 @@ import Gallery from '../components/gallery';
 
 export default class GalleryPage extends Layout {
   static async getInitialProps(obj) {
+    const [
+      baseProps,
+      pictures
+    ] = await Promise.all([
+      super.getInitialProps(obj),
+      Gallery.getPictures(40)
+    ]);
+
     return {
-      ...await super.getInitialProps(obj),
-      pictures: await Gallery.getPictures(40)
+      ...baseProps,
+      pictures
     }
   }
 

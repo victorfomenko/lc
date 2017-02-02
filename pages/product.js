@@ -103,10 +103,16 @@ function Cotroller(picData, onServer) {
 
 export default class ProductPage extends Layout {
   static async getInitialProps(obj) {
-    const baseProps = await super.getInitialProps(obj);
     const {query, req} = obj;
     const {pictureUrl} = query || {};
-    const picture = await this.getPicture(pictureUrl);
+
+    const [
+      baseProps,
+      picture
+    ] = await Promise.all([
+      super.getInitialProps(obj),
+      this.getPicture(pictureUrl)
+    ]);
 
     if (picture) {
       baseProps.head.title = picture.name + ' от ' + picture.author;
