@@ -1,3 +1,5 @@
+import {Tabs, Tab} from 'react-bootstrap';
+
 export default () => {
   return (
     <div className="modal modal--product" id="samples">
@@ -8,8 +10,8 @@ export default () => {
               aria-hidden="true">×</span></button>
           </div>
           <div className="modal__body">
-            <tabset>
-              <tab heading="В раме">
+            <Tabs defaultActiveKey={1} id="products-tab">
+              <Tab eventKey={1} title="В раме">
                 <div className="row">
                   <div className="col-xs-12 col-sm-4">
                     <img className="modal__body__row__img" src="/static/img/products/samples/frame-1.jpg"/>
@@ -26,8 +28,8 @@ export default () => {
                       картины.</p>
                   </div>
                 </div>
-              </tab>
-              <tab heading="На холсте">
+              </Tab>
+              <Tab eventKey={2} title="На холсте">
                 <div className="row">
                   <div className="col-xs-12 col-sm-4">
                     <img className="modal__body__row__img" src="/static/img/products/samples/canvas-1.jpg"/>
@@ -44,8 +46,8 @@ export default () => {
                       картины.</p>
                   </div>
                 </div>
-              </tab>
-              <tab heading="Печать">
+              </Tab>
+              <Tab eventKey={3} title="Печать">
                 <div className="row">
                   <div className="col-xs-12 col-sm-6">
                     <img className="modal__body__row__img" src="/static/img/products/samples/print-1.jpg"/>
@@ -56,8 +58,8 @@ export default () => {
                     <p>Сразу можно повесить на стену или вставить в раму.</p>
                   </div>
                 </div>
-              </tab>
-            </tabset>
+              </Tab>
+            </Tabs>
           </div>
           <div className="modal__footer m-text_left">
             <ul>
