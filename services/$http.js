@@ -11,7 +11,7 @@ export default {
 
     return fetch(host + url, {
       method: 'POST',
-      body: data,
+      body: typeof data === 'number' ? String(data) : data,
       credentials: 'include',
       headers: {
         "Cookie": 'PHPSESSID=' + sid
