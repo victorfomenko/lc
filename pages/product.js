@@ -1,4 +1,5 @@
 import React from 'react';
+import Router from 'next/router';
 
 // services
 import $http from '../services/$http';
@@ -25,9 +26,14 @@ function Cotroller(picData, onServer) {
   $scope.borderOptions = formListOptions.canvas.borders;
   $scope.samplesIsShow = false;
 
+  //Default states
+  $scope.formFrameSize =      appService.optionsList.sizesV[5].value;
+  $scope.sizeOptions =        formListOptions.sizesV;
+
 
   $scope.changeSize = function (frameSize) {
     dataForSent.formFrameSize = frameSize;
+    $scope.mounted && updateImageProportions();
     $scope.formPrice = appService.calcPriceSaveForSent();
   };
   $scope.changeFrame = function (frameType) {
@@ -74,6 +80,7 @@ function Cotroller(picData, onServer) {
     $scope.formPrice = appService.calcPriceSaveForSent();
     //console.log(dataForSent);
   };
+  $scope.changeProportionsNoteText = changeProportionsNoteText;
   function updateMainClass() {
     $('.product__before').css({'background-image': 'none'});
     $('.product__after').css({'background-image': 'none'});
@@ -82,9 +89,48 @@ function Cotroller(picData, onServer) {
       productModefierPrefix + $scope.formFrameType,
       productModefierPrefix + $scope.formBorderType].join(' ');
     if ($scope.formBorderType === 'LB') {
-      var picUrl = 'url("/static' + picData.full + '")';
+      var picUrl = 'url("' + picData.full + '")';
       $('.product__before').css({'background-image': picUrl});
       $('.product__after').css({'background-image': picUrl});
+    }
+  }
+  function proportions() {
+    var frameProportions = getImageData().proportions,
+      imageHeight = document.getElementById('mainPicture').naturalHeight,
+      imageWidth = document.getElementById('mainPicture').naturalWidth,
+      imageProportions = imageHeight/imageWidth,
+      result = 1;
+    if(frameProportions<imageProportions) result = -1;
+    if ( Math.round(frameProportions*100)/100 === Math.round(imageProportions*100)/100) result = 0;
+    return result
+  }
+  function getImageData () {
+    var params = $scope.formFrameSize.split('|'),
+      selectedHeight = params[0],
+      selectedWidth = params[1],
+      proportions = selectedHeight / selectedWidth,
+      mainImageWidth = document.getElementById('image-container').offsetWidth,
+      mainImageHeight = mainImageWidth * proportions;
+    return {
+      'height': mainImageHeight+ 'px',
+      'width': mainImageWidth+ 'px',
+      'proportions': proportions
+    }
+  }
+  function updateImageProportions(){
+    $scope.productImageHeight = getImageData().height;
+    changeProportionsNoteText();
+  }
+  function changeProportionsNoteText () {
+    $scope.showProportionsNoteText = '';
+    $scope.showProportionsNote = false;
+    if (proportions() === -1 || proportions() === 1) {
+      $scope.showProportionsNote = true;
+      $scope.showProportionsNoteText = '(фото обрежется по краям)'
+    }
+    if (proportions() === 0) {
+      $scope.showProportionsNote = true;
+      $scope.showProportionsNoteText = '(идеальный)'
     }
   }
 
@@ -96,6 +142,13 @@ function Cotroller(picData, onServer) {
     $scope.formFrameSize = dataForSent.formFrameSize;
     $scope.sizeOptions = picData.sizes;
     !onServer && updateMainClass();
+  } else {
+    $scope.sizeOptions =        formListOptions.sizesV;
+
+    if(appService.imageProp > 1 ) {
+      $scope.formFrameSize =      appService.optionsList.sizesH[5].value;
+      $scope.sizeOptions = formListOptions.sizesH;
+    }
   }
   $scope.formPrice = appService.calcPriceSaveForSent();
   return $scope;
@@ -103,19 +156,27 @@ function Cotroller(picData, onServer) {
 
 export default class ProductPage extends Layout {
   static async getInitialProps(obj) {
+    const baseProps = await super.getInitialProps(obj);
+    let picture;
+
     const {query, req} = obj;
     const {pictureUrl} = query || {};
 
-    const [
-      baseProps,
-      picture
-    ] = await Promise.all([
-      super.getInitialProps(obj),
-      this.getPicture(pictureUrl)
-    ]);
+    if (pictureUrl) {
+      picture = await this.getPicture(pictureUrl);
 
-    if (picture) {
-      baseProps.head.title = picture.name + ' от ' + picture.author;
+      if (picture) {
+        baseProps.head.title = picture.name + ' от ' + picture.author;
+        picture.full = '/static' + picture.full;
+      }
+    } else {
+      const file = appService.dataForSent.imageBase64;
+      if (file) {
+        picture = {
+          full: file,
+          sizes: []
+        }
+      }
     }
 
     return {
@@ -130,10 +191,25 @@ export default class ProductPage extends Layout {
     return $http.post('/ajax/getPic.php', pictureUrl);
   }
 
-  $scope = Cotroller(this.props.picture || {}, this.props.onServer);
+  constructor(...args) {
+    super(...args);
+    try {
+      this.$scope = Cotroller(this.props.picture || {}, this.props.onServer);
+    } catch (e) {
+      console.error(e.stack)
+    }
+  }
 
   componentDidMount() {
     $("body").animate({scrollTop: 0}, 1);
+    this.$scope.mounted = true;
+    this.$scope.changeProportionsNoteText();
+    this.forceUpdate();
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    Router.push('/shipping')
   }
 
   content() {
@@ -146,12 +222,12 @@ export default class ProductPage extends Layout {
           <div className="col-xs-12 col-sm-7 col-lg-8 m-text_center">
             <div className={"product " + $scope.productClass} id="productImage">
               <div className="product__before"></div>
-              <div className="product__frame">
+              <div className="product__frame" id="image-container">
                 <div className="product__split product__split--top"></div>
                 <div className="product__split product__split--bottom"></div>
                 <div className="product__mate">
                   <div className="product__shadow">
-                    <img className="product__image__img" id="mainPicture" src={'/static' + $scope.pic.full} alt={$scope.pic.name}/>
+                    <img className="product__image__img" id="mainPicture" src={$scope.pic.full} alt={$scope.pic.name}/>
                   </div>
                 </div>
               </div>
@@ -160,14 +236,18 @@ export default class ProductPage extends Layout {
           </div>
           <div className="col-xs-12 col-sm-5 col-lg-4 ">
             <div className="product-info">
-              <div className="product-info__header">
-                <h1 className="product-info__header__title">{$scope.pic.name}</h1>
-                <p className="product-info__header__author">Автор:&nbsp;
-                  <ParamLink url='/user/:userUrl' params={{userUrl: $scope.pic.urlname}} title={$scope.pic.author}/>
-                </p>
-              </div>
-              <hr/>
-              <form action={"/shipping/" + pictureUrl} className="form">
+              {
+                $scope.pic.author && (
+                  <div className="product-info__header">
+                    <h1 className="product-info__header__title">{$scope.pic.name}</h1>
+                    <p className="product-info__header__author">Автор:&nbsp;
+                      <ParamLink url='/user/:userUrl' params={{userUrl: $scope.pic.urlname}} title={$scope.pic.author}/>
+                    </p>
+                  </div>
+                )
+              }
+              {$scope.pic.author && <hr/>}
+              <form action="/shipping/" onSubmit={e=> this.onSubmit(e)} className="form">
                 <div className="form__samples row">
                   {
                     $scope.productStates.map(product=> (
@@ -189,7 +269,11 @@ export default class ProductPage extends Layout {
                     примеры</a>
                 </div>
                 <div className="form__row form__row--size">
-                  <label htmlFor="imgSizing">Размер</label>
+                  <label htmlFor="imgSizing">Размер&nbsp; {
+                    $scope.showProportionsNote && (
+                      <span className="form__row__note m-text_info">{$scope.showProportionsNoteText}</span>
+                    )
+                  }</label>
                   <div className="select">
                     <select id="imgSizing" name="size" required value={$scope.formFrameSize || ''}
                             onChange={e=> ($scope.formFrameSize = e.target.value) & $scope.changeSize($scope.formFrameSize) & this.forceUpdate()}>

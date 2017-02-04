@@ -28,31 +28,23 @@ export default class Index extends Layout {
     }
   }
 
-  onClickLoadFile(){
-    document.querySelector('input[type="file"]').click();
+  onClickLoadFile() {
+    $(this.fileInput).click();
   }
-
 
   handleFileSelect(e){
     let file = e.target.files; // FileList object
     // Only process image files.
-    if (!file[0].type.match('image.*')) { return null }
-    var reader = new FileReader();
+    if (!/image.*/.test(file[0].type)) { return null }
+    let reader = new FileReader();
     reader.onload = (function(theFile) {
       return (e) => {
         var image = new Image();
         image.src = e.target.result;
         api.imageProp = image.width/image.height;
-        Router.onRouteChangeComplete = (url) => {
-          api.dataForSent.image = null;
-          api.dataForSent.imageBase64 = e.target.result;
-          // Render thumbnail.
-          var imageContainer = document.getElementById('image-container');
-          imageContainer.style.backgroundImage=['url("', e.target.result ,'")'].join('');
-          imageContainer.innerHTML = ['<img class="product__image__img" id="mainPicture" src="', e.target.result,
-            '" title="', escape(theFile.name), '"/>'].join('');
-        };
-        Router.push('/canvas')
+        api.dataForSent.image = null;
+        api.dataForSent.imageBase64 = e.target.result;
+        Router.push('/product', '/canvas')
       };
     })(file[0]);
 
@@ -67,8 +59,15 @@ export default class Index extends Layout {
       <div>
         <section className={`banner banner--item-${bannerNumber}`}>
           <h1 className="banner__title">Превращаем фотографии в картины</h1>
-          <a className="btn btn-info btn-lg" onClick={this.onClickLoadFile}>Загрузить своё фото</a>
-          <input className="m-hidden" defaultValue="Загрузить фото" type="file" id="load-file" onChange={this.handleFileSelect}/>
+          <a className="btn btn-info btn-lg" onClick={e=> this.onClickLoadFile(e)}>Загрузить своё фото</a>
+          <input
+            className="m-hidden"
+            defaultValue="Загрузить фото"
+            type="file" id="load-file"
+            accept="image/*"
+            onChange={this.handleFileSelect}
+            ref={node=> this.fileInput = node}
+          />
           <p> или <Link href="/gallery"><a className="banner__title__small">посмотреть галерею</a></Link></p>
         </section>
         <section className="container">

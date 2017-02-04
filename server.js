@@ -20,6 +20,10 @@ app.prepare()
       return app.render(req, res, '/user', Object.assign({}, req.params, req.query));
     });
 
+    server.get('/canvas', (req, res) => {
+      res.redirect('/');
+    });
+
     if (dev) {
       const httpProxy = require('http-proxy');
       const proxy = httpProxy.createProxyServer({
