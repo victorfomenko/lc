@@ -55,7 +55,7 @@ export default ({path, user}) => {
     default:
       userPanel = (
         <div>
-          <span className="header__flex__item__email"><Link href="#modal-login"><a data-toggle="modal" data-target="#modal-login">вход в личный кабинет</a></Link></span>
+          <span className="header__flex__item__email"><a href="javascript:void(0)" data-toggle="modal" data-target="#modal-login">вход в личный кабинет</a></span>
         </div>
       );
       break;
