@@ -85,20 +85,20 @@ api.productStates = [
 ];
 api.pictures = [];
 api.dataForSent = {
-  formName: null,
-  formPhone: null,
-  formEmail: null,
-  formPostal: null,
+  formName: '',
+  formPhone: '',
+  formEmail: '',
+  formPostal: '',
   formProduct: 'CP',
   formFrameSize: api.optionsList.sizesH[5].value,
   formFrameType: '150',
   formBorderType: 'BB',
-  formPrice: null,
+  formPrice: '',
   formShippingPrice: 0,
   formCity: 'Казань',
-  formAddress: null,
-  imageBase64: null,
-  image: null
+  formAddress: '',
+  imageBase64: '',
+  image: ''
 
 };
 api.imageProp = 1.5; //default horizontal prop
