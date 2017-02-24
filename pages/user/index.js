@@ -53,7 +53,7 @@ export default class User extends Layout {
                    title={artist.name}/>
               {
                 (isOwner || (session.user && session.user.role === 'admin')) && (
-                  <ParamLink url='/user/:userUrl/profile/edit' params={{userUrl}}>
+                  <ParamLink url='/profile/edit' params={{userUrl}}>
                     <a className="btn btn-info btn-sm">Редактировать</a>
                   </ParamLink>
                 )

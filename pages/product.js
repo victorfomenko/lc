@@ -220,14 +220,16 @@ export default class ProductPage extends Layout {
       <section className={"container m-padding-main " + $scope.mainClass}>
         <div className="row">
           <div className="col-xs-12 col-sm-7 col-lg-8 m-text_center">
-            <div className={"product " + $scope.productClass} id="productImage">
+            <div className={"product product--loaded " + $scope.productClass} id="productImage">
               <div className="product__before"></div>
-              <div className="product__frame" id="image-container">
+              <div className="product__frame">
                 <div className="product__split product__split--top"></div>
                 <div className="product__split product__split--bottom"></div>
                 <div className="product__mate">
                   <div className="product__shadow">
-                    <img className="product__image__img" id="mainPicture" src={$scope.pic.full} alt={$scope.pic.name}/>
+                    <div className="product__image" id="image-container" style={{'height': $scope.productImageHeight, 'background-image': `url(${$scope.pic.full})`}}>
+                      <img className="product__image__img" id="mainPicture" src={$scope.pic.full} alt={$scope.pic.name} style={{'height': $scope.productImageHeight}} />
+                    </div>
                   </div>
                 </div>
               </div>
