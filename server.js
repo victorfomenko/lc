@@ -4,6 +4,8 @@ const express = require('express');
 const next = require('next');
 const httpProxy = require('http-proxy');
 
+const auth = require('./router/auth');
+
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
@@ -50,6 +52,7 @@ app.prepare()
     server.use('/ajax/', (req, res)=> {
       proxy.web(req, res, {target: apiHost + '/ajax/'});
     });
+    // server.use('/auth', auth);
 
     // default routing
     server.get('*', (req, res) => {
