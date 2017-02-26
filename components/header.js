@@ -8,13 +8,12 @@ import ParamLink from './paramLink';
 
 export default ({path, user}) => {
   const currentUser = user || {};
-  const isAuthorized = false;
 
   const items = [
     {href: '/gallery', title: 'Галерея'},
     {href: '/delivery', title: 'Доставка'},
     {href: '/price', title: 'Цены'},
-    isAuthorized && currentUser.role === 'admin' && {href: '/orders', title: 'Заказы'},
+    currentUser.role === 'admin' && {href: '/orders', title: 'Заказы'},
   ].filter(i=>i).map(({title, href})=> {
     const classes = cn('menu__item', {
       'active': href === path
