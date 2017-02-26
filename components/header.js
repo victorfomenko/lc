@@ -53,7 +53,7 @@ export default ({path, user}) => {
       );
       break;
     default:
-      userPanel = (
+      userPanel = null && (
         <div>
           <span className="header__flex__item__email"><a href="javascript:void(0)" data-toggle="modal" data-target="#modal-login">вход в личный кабинет</a></span>
         </div>
