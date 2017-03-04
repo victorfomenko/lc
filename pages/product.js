@@ -27,8 +27,27 @@ function Cotroller(picData, onServer) {
   $scope.samplesIsShow = false;
 
   //Default states
-  $scope.formFrameSize =      appService.optionsList.sizesV[5].value;
+  $scope.formFrameSize =      appService.optionsList.sizesV[1].value;
   $scope.sizeOptions =        formListOptions.sizesV;
+  $scope.pic = picData;
+
+  if (picData.sizes.length > 0) {
+    const [ width, height ] = picData.sizes[0].value.split('|');
+    appService.imageProp = calcProportions({ width, height });
+    //dataForSent.formFrameSize = picData.sizes[0].value;
+    dataForSent.imageBase64 = null;
+    dataForSent.image = picData.full;
+    //$scope.formFrameSize = dataForSent.formFrameSize;
+    //$scope.sizeOptions = picData.sizes;
+    !onServer && updateMainClass();
+  } 
+  $scope.sizeOptions = formListOptions.sizesV;
+
+  if(appService.imageProp > 1 ) {
+    $scope.formFrameSize = appService.optionsList.sizesH[1].value;
+    $scope.sizeOptions = formListOptions.sizesH;
+  }
+  $scope.formPrice = appService.calcPriceSaveForSent();
 
 
   $scope.changeSize = function (frameSize) {
@@ -81,6 +100,7 @@ function Cotroller(picData, onServer) {
     //console.log(dataForSent);
   };
   $scope.changeProportionsNoteText = changeProportionsNoteText;
+  $scope.updateImageProportions = updateImageProportions;
   function updateMainClass() {
     $('.product__before').css({'background-image': 'none'});
     $('.product__after').css({'background-image': 'none'});
@@ -133,24 +153,18 @@ function Cotroller(picData, onServer) {
       $scope.showProportionsNoteText = '(идеальный)'
     }
   }
-
-  $scope.pic = picData;
-  if (picData.sizes.length > 0) {
-    dataForSent.formFrameSize = picData.sizes[0].value;
-    dataForSent.imageBase64 = null;
-    dataForSent.image = picData.full;
-    $scope.formFrameSize = dataForSent.formFrameSize;
-    $scope.sizeOptions = picData.sizes;
-    !onServer && updateMainClass();
-  } else {
-    $scope.sizeOptions =        formListOptions.sizesV;
-
-    if(appService.imageProp > 1 ) {
-      $scope.formFrameSize =      appService.optionsList.sizesH[5].value;
-      $scope.sizeOptions = formListOptions.sizesH;
+  function calcProportions({ width, height }) {
+    if(typeof width !== 'number' || typeof height !== 'number') {
+      width = Number(width);
+      height = Number(height);
     }
+    if(isNaN(width) || isNaN(height)){
+      console.warn('width or height is not a number')
+      return null;
+    }
+    return height / width;
   }
-  $scope.formPrice = appService.calcPriceSaveForSent();
+  
   return $scope;
 }
 
@@ -204,6 +218,7 @@ export default class ProductPage extends Layout {
     $("body").animate({scrollTop: 0}, 1);
     this.$scope.mounted = true;
     this.$scope.changeProportionsNoteText();
+    this.$scope.updateImageProportions();
     this.forceUpdate();
   }
 
@@ -227,7 +242,7 @@ export default class ProductPage extends Layout {
                 <div className="product__split product__split--bottom"></div>
                 <div className="product__mate">
                   <div className="product__shadow">
-                    <div className="product__image" id="image-container" style={{'height': $scope.productImageHeight, 'background-image': `url(${$scope.pic.full})`}}>
+                    <div className="product__image" id="image-container" style={{'height': $scope.productImageHeight, 'backgroundImage': `url(${$scope.pic.full})`}}>
                       <img className="product__image__img" id="mainPicture" src={$scope.pic.full} alt={$scope.pic.name} style={{'height': $scope.productImageHeight}} />
                     </div>
                   </div>
