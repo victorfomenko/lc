@@ -12,7 +12,6 @@ $whiteFrameColor: #F7FCFF
 	display: inline-block
 	position: relative
 	margin: 0 auto
-	max-width: 100%
 	margin-bottom: 60px
 
 .product__frame,
@@ -20,7 +19,8 @@ $whiteFrameColor: #F7FCFF
 .product__mate
 	/*display inline-block !important*/
 	position: relative
-	max-width: 100%
+	width: 100%
+	height: 100%
 
 .product__split
 	display: none
@@ -73,7 +73,7 @@ $whiteFrameColor: #F7FCFF
 .product__image
 	position: relative
 	z-index: 1
-	max-width: 100%
+	width: 100%
 	background-repeat: no-repeat
 	background-size: cover
 	background-position: center center
@@ -171,6 +171,8 @@ $whiteFrameColor: #F7FCFF
 
 
 .product--frame
+	width: 100%
+
 	.product__split
 		display: block
 
@@ -214,8 +216,6 @@ $whiteFrameColor: #F7FCFF
 			border-right-color: #DDD
 
 .product--loaded
-	display: block
-
 	.product__image__img
 		visibility: hidden
 		display: inline

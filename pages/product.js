@@ -30,7 +30,6 @@ function Cotroller(picData, onServer) {
   $scope.formFrameSize =      appService.optionsList.sizesV[1].value;
   $scope.sizeOptions =        formListOptions.sizesV;
   $scope.pic = picData;
-
   if (picData.sizes.length > 0) {
     const [ width, height ] = picData.sizes[0].value.split('|');
     appService.imageProp = calcProportions({ width, height });
@@ -54,6 +53,7 @@ function Cotroller(picData, onServer) {
     dataForSent.formFrameSize = frameSize;
     $scope.mounted && updateImageProportions();
     $scope.formPrice = appService.calcPriceSaveForSent();
+    updateBordersSizes();
   };
   $scope.changeFrame = function (frameType) {
     dataForSent.formFrameType = frameType;
@@ -64,6 +64,7 @@ function Cotroller(picData, onServer) {
     dataForSent.formBorderType = borderType;
     updateMainClass();
     $scope.formPrice = appService.calcPriceSaveForSent();
+    updateBordersSizes();
   };
   $scope.changeProduct = function (product) {
     $scope.productStates.forEach(function (item) {
@@ -97,7 +98,7 @@ function Cotroller(picData, onServer) {
     updateMainClass();
     dataForSent.formProduct = product.id;
     $scope.formPrice = appService.calcPriceSaveForSent();
-    //console.log(dataForSent);
+    updateBordersSizes()
   };
   $scope.changeProportionsNoteText = changeProportionsNoteText;
   $scope.updateImageProportions = updateImageProportions;
@@ -125,20 +126,44 @@ function Cotroller(picData, onServer) {
     return result
   }
   function getImageData () {
-    var params = $scope.formFrameSize.split('|'),
-      selectedHeight = params[0],
-      selectedWidth = params[1],
-      proportions = selectedHeight / selectedWidth,
-      mainImageWidth = document.getElementById('image-container').offsetWidth,
-      mainImageHeight = mainImageWidth * proportions;
+    const maxImageHeight = window.innerHeight - document.querySelector('.header').offsetHeight - 130;
+    const maxImageWidth = document.querySelector('.product-wrapper').offsetWidth;
+    
+    const params = $scope.formFrameSize.split('|');
+    const selectedHeight = params[0];
+    const selectedWidth = params[1];
+    const proportions = selectedHeight / selectedWidth;
+    
+    let mainImageWidth = maxImageWidth;
+    let mainImageHeight = mainImageWidth * proportions;
+    
+    if(mainImageHeight > maxImageHeight) {
+      mainImageHeight = maxImageHeight;
+      mainImageWidth = mainImageHeight / proportions;
+    }
+
     return {
-      'height': mainImageHeight+ 'px',
-      'width': mainImageWidth+ 'px',
+      'height': mainImageHeight,
+      'width': mainImageWidth,
       'proportions': proportions
     }
   }
+  function updateBordersSizes() {
+    const {height} = getImageData();
+    const [selectedHeight] = $scope.formFrameSize.split('|');
+
+
+    const mateBorderSize = $scope.formBorderType === '630MA' ? 6 : 0;
+    const frameBorderSize = $scope.formProduct === 'FP' ? 2.5 : 0;
+    const mate = height * mateBorderSize / selectedHeight;
+    const frame = height * frameBorderSize / selectedHeight;
+
+    $scope.mateSize = mate;
+    $scope.frameSize = frame;
+  }
   function updateImageProportions(){
     $scope.productImageHeight = getImageData().height;
+    $scope.productImageWidth = getImageData().width;
     changeProportionsNoteText();
   }
   function changeProportionsNoteText () {
@@ -234,16 +259,16 @@ export default class ProductPage extends Layout {
     return (
       <section className={"container m-padding-main " + $scope.mainClass}>
         <div className="row">
-          <div className="col-xs-12 col-sm-7 col-lg-8 m-text_center">
-            <div className={"product product--loaded " + $scope.productClass} id="productImage">
+          <div className="col-xs-12 col-sm-7 col-lg-8 m-text_center product-wrapper">
+            <div className={"product product--loaded " + $scope.productClass} id="productImage" style={{'height': $scope.productImageHeight + 'px', 'width': $scope.productImageWidth + 'px'}}>
               <div className="product__before"></div>
-              <div className="product__frame">
+              <div className="product__frame" style={{'padding': $scope.frameSize + 'px'}}>
                 <div className="product__split product__split--top"></div>
                 <div className="product__split product__split--bottom"></div>
-                <div className="product__mate">
+                <div className="product__mate" style={{'padding': $scope.mateSize + 'px'}}>
                   <div className="product__shadow">
-                    <div className="product__image" id="image-container" style={{'height': $scope.productImageHeight, 'backgroundImage': `url(${$scope.pic.full})`}}>
-                      <img className="product__image__img" id="mainPicture" src={$scope.pic.full} alt={$scope.pic.name} style={{'height': $scope.productImageHeight}} />
+                    <div className="product__image" id="image-container" style={{'height': '100%', 'width': '100%', 'backgroundImage': `url(${$scope.pic.full})`}}>
+                      <img className="product__image__img" id="mainPicture" src={$scope.pic.full} alt={$scope.pic.name} style={{'height': '100%', 'width': '100%'}} />
                     </div>
                   </div>
                 </div>
