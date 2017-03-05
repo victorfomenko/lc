@@ -154,7 +154,7 @@ function Cotroller(picData, onServer) {
 
 
     const mateBorderSize = $scope.formBorderType === '630MA' ? 6 : 0;
-    const frameBorderSize = $scope.formProduct === 'FP' ? 2.5 : 0;
+    const frameBorderSize = $scope.formProduct === 'FP' ? 2.2 : 0;
     const mate = height * mateBorderSize / selectedHeight;
     const frame = height * frameBorderSize / selectedHeight;
 

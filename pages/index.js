@@ -10,10 +10,11 @@ import Layout from '../components/layout';
 import Gallery from '../components/gallery';
 
 
-const bannerNumber = Math.floor((Math.random() * 5) + 1);
+
 
 export default class Index extends Layout {
   static async getInitialProps(obj) {
+    const bannerNumber = Math.floor((Math.random() * 5) + 2);
     const [
       baseProps,
       pictures
@@ -24,6 +25,7 @@ export default class Index extends Layout {
 
     return {
       ...baseProps,
+      bannerNumber,
       pictures
     }
   }
@@ -53,7 +55,7 @@ export default class Index extends Layout {
   }
 
   content(){
-    const {pictures} = this.props;
+    const {pictures, bannerNumber} = this.props;
 
     return(
       <div>
