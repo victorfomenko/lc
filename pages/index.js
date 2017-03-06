@@ -201,9 +201,7 @@ export default class Index extends Layout {
           <div className="row">
             <div className="col-xs-12 m-text_center">
               <h2 className="big">Оформить заказ – проще простого!</h2>
-              <Link>
-                <a className="btn btn-info btn-lg" onClick={this.openLoadFile}>Загрузить своё фото</a>
-              </Link>
+              <a className="btn btn-info btn-lg" onClick={e=> this.onClickLoadFile(e)}>Загрузить своё фото</a>
             </div>
           </div>
         </section>
