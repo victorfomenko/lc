@@ -8,6 +8,7 @@ import appService from '../services/appService';
 // components
 import Layout from '../components/layout';
 import ParamLink from '../components/paramLink';
+import ProductTypeSelector from '../components/ProductTypeSelector';
 
 function Cotroller(picData, onServer) {
   var $scope = {};
@@ -33,15 +34,12 @@ function Cotroller(picData, onServer) {
   if (picData.sizes.length > 0) {
     const [ width, height ] = picData.sizes[0].value.split('|');
     appService.imageProp = calcProportions({ width, height });
-    //dataForSent.formFrameSize = picData.sizes[0].value;
     dataForSent.imageBase64 = null;
     dataForSent.image = picData.full;
-    //$scope.formFrameSize = dataForSent.formFrameSize;
-    //$scope.sizeOptions = picData.sizes;
     !onServer && updateMainClass();
   } 
   $scope.sizeOptions = formListOptions.sizesV;
-
+  $scope.imageProportion = appService.imageProp;
   if(appService.imageProp > 1 ) {
     $scope.formFrameSize = appService.optionsList.sizesH[1].value;
     $scope.sizeOptions = formListOptions.sizesH;
@@ -49,59 +47,36 @@ function Cotroller(picData, onServer) {
   $scope.formPrice = appService.calcPriceSaveForSent();
 
 
-  $scope.changeSize = function (frameSize) {
-    dataForSent.formFrameSize = frameSize;
+  $scope.changeSize = function (frameSize, state) {
+    $scope.formFrameSize = frameSize;
     $scope.mounted && updateImageProportions();
-    $scope.formPrice = appService.calcPriceSaveForSent();
     updateBordersSizes();
   };
   $scope.changeFrame = function (frameType) {
     dataForSent.formFrameType = frameType;
+    $scope.formFrameType = frameType;
     updateMainClass();
     $scope.formPrice = appService.calcPriceSaveForSent();
   };
-  $scope.changeBorder = function (borderType) {
-    dataForSent.formBorderType = borderType;
+  $scope.changeBorder = function (borderType, state) {
+    $scope.formBorderType = borderType;
     updateMainClass();
-    $scope.formPrice = appService.calcPriceSaveForSent();
     updateBordersSizes();
   };
-  $scope.changeProduct = function (product) {
-    $scope.productStates.forEach(function (item) {
-      item.isActive = false
-    });
-    product.isActive = true;
-    $scope.disableEdge = false;
-    //disable edge form if border frame selected
-    if (baseMainClass === 'canvas' && (dataForSent.formFrameType === "BF" || dataForSent.formFrameType === "WF" || dataForSent.formFrameType === "EF")) {
-      $scope.disableEdge = true;
-    }
-    if (product.id === "PO") {
-      $scope.formFrameType = dataForSent.formFrameType = null;
-      $scope.formBorderType = dataForSent.formBorderType = null;
-      $scope.borderOptions = formListOptions.print.borders;
-      $scope.frameOptions = formListOptions.print.frame;
-    }
-    else if (product.id === "CP") {
-      $scope.formFrameType = dataForSent.formFrameType = "150";
-      $scope.formBorderType = dataForSent.formBorderType = "BB";
-      $scope.borderOptions = formListOptions.canvas.borders;
-      $scope.frameOptions = formListOptions.canvas.frame;
-    }
-    else if (product.id === "FP") {
-      $scope.formFrameType = dataForSent.formFrameType = "BF";
-      $scope.formBorderType = dataForSent.formBorderType = "630MA";
-      $scope.borderOptions = formListOptions.inframe.borders;
-      $scope.frameOptions = formListOptions.inframe.frame;
-    }
+  $scope.changeProduct = function (product, state) {
+    console.log(state);
     baseMainClass = product.class;
+    $scope.formProduct = product.id;
+    $scope.formFrameType = state.frameType;
+    $scope.formFrameSize = state.frameSize;
+    $scope.formBorderType = state.edgeType;
+
     updateMainClass();
-    dataForSent.formProduct = product.id;
-    $scope.formPrice = appService.calcPriceSaveForSent();
-    updateBordersSizes()
+    updateBordersSizes();
   };
-  $scope.changeProportionsNoteText = changeProportionsNoteText;
   $scope.updateImageProportions = updateImageProportions;
+  $scope.updateMainClass = updateMainClass;
+
   function updateMainClass() {
     $('.product__before').css({'background-image': 'none'});
     $('.product__after').css({'background-image': 'none'});
@@ -152,32 +127,19 @@ function Cotroller(picData, onServer) {
     const {height} = getImageData();
     const [selectedHeight] = $scope.formFrameSize.split('|');
 
-
     const mateBorderSize = $scope.formBorderType === '630MA' ? 6 : 0;
     const frameBorderSize = $scope.formProduct === 'FP' ? 2.2 : 0;
     const mate = height * mateBorderSize / selectedHeight;
     const frame = height * frameBorderSize / selectedHeight;
-
+    console.log({ mate, frame })
     $scope.mateSize = mate;
     $scope.frameSize = frame;
   }
   function updateImageProportions(){
     $scope.productImageHeight = getImageData().height;
     $scope.productImageWidth = getImageData().width;
-    changeProportionsNoteText();
   }
-  function changeProportionsNoteText () {
-    $scope.showProportionsNoteText = '';
-    $scope.showProportionsNote = false;
-    if (proportions() === -1 || proportions() === 1) {
-      $scope.showProportionsNote = true;
-      $scope.showProportionsNoteText = '(фото обрежется по краям)'
-    }
-    if (proportions() === 0) {
-      $scope.showProportionsNote = true;
-      $scope.showProportionsNoteText = '(идеальный)'
-    }
-  }
+ 
   function calcProportions({ width, height }) {
     if(typeof width !== 'number' || typeof height !== 'number') {
       width = Number(width);
@@ -242,7 +204,6 @@ export default class ProductPage extends Layout {
   componentDidMount() {
     $("body").animate({scrollTop: 0}, 1);
     this.$scope.mounted = true;
-    this.$scope.changeProportionsNoteText();
     this.$scope.updateImageProportions();
     this.forceUpdate();
   }
@@ -255,7 +216,6 @@ export default class ProductPage extends Layout {
   content() {
     const {$scope, props} = this;
     const {pictureUrl} = props;
-
     return (
       <section className={"container m-padding-main " + $scope.mainClass}>
         <div className="row">
@@ -290,66 +250,12 @@ export default class ProductPage extends Layout {
               }
               {$scope.pic.author && <hr/>}
               <form action="/shipping/" onSubmit={e=> this.onSubmit(e)} className="form">
-                <div className="form__samples row">
-                  {
-                    $scope.productStates.map(product=> (
-                      <div className="col-xs-4" key={product.id}>
-                        <input id={"product-" + product.id} type="radio" name="product_code" className="radio radio--image"
-                               onChange={e=> ($scope.formProduct = e.target.value) & $scope.changeProduct(product) & this.forceUpdate()}
-                               value={product.id}
-                               checked={$scope.formProduct === product.id}/>
-                        <label htmlFor={"product-" + product.id}>
-                          <small>{product.name}</small>
-                          <img src={"/static/img/products/product-" + product.id + '.jpg'} alt="Тип продукта"/>
-                        </label>
-                      </div>
-                    ))
-                  }
-                </div>
-                <div className="form__row">
-                  <a href="#" className="btn btn-block btn-helper" data-toggle="modal" data-target="#samples">Посмотреть
-                    примеры</a>
-                </div>
-                <div className="form__row form__row--size">
-                  <label htmlFor="imgSizing">Размер&nbsp; {
-                    $scope.showProportionsNote && (
-                      <span className="form__row__note m-text_info">{$scope.showProportionsNoteText}</span>
-                    )
-                  }</label>
-                  <div className="select">
-                    <select id="imgSizing" name="size" required value={$scope.formFrameSize || ''}
-                            onChange={e=> ($scope.formFrameSize = e.target.value) & $scope.changeSize($scope.formFrameSize) & this.forceUpdate()}>
-                      {$scope.sizeOptions.map(o=> (
-                        <option key={o.value} value={o.value}>{o.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="form__row form__row--frame">
-                  <label htmlFor="imgFrame">Рамка</label>
-                  <div className="select">
-                    <select id="imgFrame" name="frame" required value={$scope.formFrameType || ''}
-                            onChange={e=> ($scope.formFrameType = e.target.value) & $scope.changeFrame($scope.formFrameType) & this.forceUpdate()}>
-                      {$scope.frameOptions.map(o=> (
-                        <option key={o.value} value={o.value}>{o.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="form__row form__row--border">
-                  <label htmlFor="imgEdge">Края</label>
-                  <div className="select">
-                    <select id="imgEdge" name="edge" required value={$scope.formBorderType || ''}
-                            disabled={$scope.disableEdge}
-                            onChange={e=> ($scope.formBorderType = e.target.value) & $scope.changeBorder($scope.formBorderType) & this.forceUpdate()}>
-                      {$scope.borderOptions.map(o=> (
-                        <option key={o.value} value={o.value}>{o.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="form__price">{$scope.formPrice}<span className="form__price__rouble m-rubble">i</span></div>
-
+                <ProductTypeSelector
+                  imageProportion={$scope.imageProportion}
+                  onProductTypeChange={(product, state)=>{$scope.changeProduct(product, state) & this.forceUpdate()}}
+                  onEdgeTypeChange={(edgeType, state)=>{$scope.changeBorder(edgeType, state) & this.forceUpdate()}}
+                  onFrameSizeChange={(frameSize, state)=>{$scope.changeSize(frameSize, state) & this.forceUpdate()}}
+                />
                 <input className="btn btn-info btn-lg" type="submit" style={{display: 'block', width: '100%'}}
                        value="Оформить доставку"/>
                 <small className="m-text_info">100% гарантия возврата средств</small>

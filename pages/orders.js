@@ -8,29 +8,29 @@ import $http from '../services/$http';
 import Layout from '../components/layout';
 
 
-export default class Sorts extends Layout {
+export default class Orders extends Layout {
 	static async getInitialProps(obj) {
-    const [
-      baseProps,
-      orders
-    ] = await Promise.all([
-      super.getInitialProps(obj),
-      $http.post('/ajax/getOrdersInfo.php')
-    ]);
+	    const [
+	      baseProps,
+	      orders
+	    ] = await Promise.all([
+	      super.getInitialProps(obj),
+	      $http.post('/ajax/getOrdersInfo.php')
+	    ]);
 
-    if(obj.req && !baseProps.session.user) {
-    	obj.res.writeHead(302, { Location: '/' })
-    	return 
-    }
-    else if(!baseProps.session.user) {
+	    if(obj.req && !baseProps.session.user) {
+	    	obj.res.writeHead(302, { Location: '/' })
+	    	return 
+	    }
+	    else if(!baseProps.session.user) {
 			document.location.pathname = '/'
 			return
-    }
+	    }
 
-    return {
-      ...baseProps,
-      orders
-    }
+	    return {
+	      ...baseProps,
+	      orders
+	    }
 	}
 
 	constructor(props) {
@@ -84,14 +84,14 @@ export default class Sorts extends Layout {
 		const orders = (this.state.orders || []).map((order, index) => {
 			return (
 				<tr key={index}>
-          <td>{order.name}</td>
-          <td>{order.phone}</td>
-          <td>{order.address}</td>
-          <td>{order.framesize}</td>
-          <td>{order.frametype}</td>
-          <td>{order.price}</td>
-          <td>{order.date}</td>
-      	</tr>
+				<td>{order.name}</td>
+				<td>{order.phone}</td>
+				<td>{order.address}</td>
+				<td>{order.framesize}</td>
+				<td>{order.frametype}</td>
+				<td>{order.price}</td>
+				<td>{order.date}</td>
+				</tr>
 			)
 		})
 
