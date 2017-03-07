@@ -84,13 +84,13 @@ export default class Orders extends Layout {
 		const orders = (this.state.orders || []).map((order, index) => {
 			return (
 				<tr key={index}>
+				<td>{order.date}</td>
 				<td>{order.name}</td>
 				<td>{order.phone}</td>
 				<td>{order.address}</td>
-				<td>{order.framesize}</td>
-				<td>{order.frametype}</td>
+				<td>{`${order.producttype}-${order.frametype}-${order.framesize}`}</td>
 				<td>{order.price}</td>
-				<td>{order.date}</td>
+				<td><a href={order.image} target='_blank'>img</a></td>
 				</tr>
 			)
 		})
@@ -101,13 +101,13 @@ export default class Orders extends Layout {
 		        <table className="table table-striped">
 		            <thead>
 			            <tr>
+			            	<th><a href="#" onClick={(e)=>{this.onDateHeaderClick(e, dateSort)}}>Дата заказа</a></th>
 			                <th><a href="#" onClick={(e)=>{this.onNameHeaderClick(e, nameSort)}}>Имя</a></th>
 			                <th>Телефон</th>
 			                <th>Адрес</th>
-			                <th>Размер рамы</th>
-			                <th>Тип рамы</th>
+			                <th>Наименование</th>
 			                <th><a href="#" onClick={(e)=>{this.onPriceHeaderClick(e, priceSort)}}>Цена</a></th>
-			                <th><a href="#" onClick={(e)=>{this.onDateHeaderClick(e, dateSort)}}>Дата заказа</a></th>
+			                <th>Изображение</th>
 			            </tr>
 		            </thead>
 		            <tbody>

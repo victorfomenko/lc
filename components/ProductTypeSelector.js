@@ -14,13 +14,8 @@ class ProductTypeSelector extends Component {
 	}
 
 	prepareState(props){
-		const productType = 	'CP';
-		const frameType = 		'150';
-		const edgeType = 		'BB';
 		const noteText = 		'(фото обрежется по краям)';
 		const showNoteText = 	false;
-		const frameOptions = 	appService.optionsList.canvas.frame;
-		const borderOptions = 	appService.optionsList.canvas.borders;
   		let frameSize = 		appService.optionsList.sizesV[1].value;
   		let sizeOptions = 		appService.optionsList.sizesV;
 
@@ -28,8 +23,15 @@ class ProductTypeSelector extends Component {
     		frameSize = 		appService.optionsList.sizesH[1].value;
 	    	sizeOptions = 		appService.optionsList.sizesH;
   		}
-  		const [width, height] = frameSize.split('|');
-  		const price = 			appService.calcPrice(width, height, productType, frameType)
+
+  		const { 
+  			frameType,
+  			edgeType, 
+  			productType, 
+  			borderOptions, 
+  			frameOptions, 
+  			price 
+  		} = this.getProductState(props.productType, props.frameSize, props.frameType, props.edgeType);
 
   		return {
   			productType,
@@ -44,63 +46,62 @@ class ProductTypeSelector extends Component {
   		}
 	}
 
-	onProductTypeChange(product) {
-		const productType = product.id;
-		let frameType = null;
-		let edgeType = null;
+	getProductState(productType, frameSize, frameType=null, edgeType=null){
 		let borderOptions = [];
 		let frameOptions = [];
-		//& $scope.changeProduct(product) & this.forceUpdate()
-		if (productType === "PO") {
+		if (productType === 'PO') {
 	      borderOptions = appService.optionsList.print.borders;
 	      frameOptions = appService.optionsList.print.frame;
 	    }
-	    else if (productType === "CP") {
-	      frameType =  '150';
-	      edgeType = "BB";
+	    else if (productType === 'CP') {
+	      frameType = frameType || '150';
+	      edgeType = edgeType || 'BB';
 	      borderOptions = appService.optionsList.canvas.borders;
 	      frameOptions = appService.optionsList.canvas.frame;
 	    }
-	    else if (productType === "FP") {
-	      frameType = "BF";
-	      edgeType = "630MA";
+	    else if (productType === 'FP') {
+	      frameType = frameType || 'BF';
+	      edgeType = edgeType || '630MA';
 	      borderOptions = appService.optionsList.inframe.borders;
 	      frameOptions = appService.optionsList.inframe.frame;
 	    }
-
-		const [ width, height ] = this.state.frameSize.split('|');
+	    const [ width, height ] = frameSize.split('|');
 		const price = appService.calcPrice(width, height, productType, frameType)
 
-	    this.setState({
-	    	frameType,
+		return {
+			frameType,
 	    	edgeType,
 	    	productType,
 	    	borderOptions,
 	    	frameOptions,
 	    	price
-	    }, () => {
+	    }
+	}
+
+	onProductTypeChange(product) {
+		const state = this.getProductState(product.id, this.state.frameSize)
+
+	    this.setState(state, () => {
     		if(this.props.onProductTypeChange) {this.props.onProductTypeChange(product, this.state)}
 	    })
 		
 	}
 
 	onFrameSizeChange(e){
-		//e=> ($scope.formFrameSize = e.target.value) & $scope.changeSize($scope.formFrameSize) & this.forceUpdate()
 		const frameSize = e.target.value;
 		const [ width, height ] = frameSize.split('|');
 		const price = appService.calcPrice(width, height, this.state.productType, this.state.frameType)
-		this.changeProportionsNoteText(this.props.imageProportion, frameSize)
+
 		this.setState({ frameSize, price }, ()=>{
 			if(this.props.onFrameSizeChange) {this.props.onFrameSizeChange(frameSize, this.state)}
 		})
 	}
 
 	onFrameTypeCahnge(e){
-		//$scope.changeFrame($scope.formFrameType) & this.forceUpdate()
 		const frameType = e.target.value;
-
 		const [ width, height ] = this.state.frameSize.split('|');
 		const price = appService.calcPrice(width, height, this.state.productType, frameType)
+
 		this.setState({ frameType, price }, () => {
 			if(this.props.onFrameTypeCahnge) {this.props.onFrameTypeCahnge(frameType, this.state)}
 		})
@@ -110,9 +111,10 @@ class ProductTypeSelector extends Component {
 
 	onEdgeTypeChange(e){
 		const edgeType = e.target.value;
-		//e=> ($scope.formBorderType = e.target.value) & $scope.changeBorder($scope.formBorderType) & this.forceUpdate()
+		const [ width, height ] = this.state.frameSize.split('|');
+		const price = appService.calcPrice(width, height, this.state.productType, edgeType)
 
-		this.setState({ edgeType }, ()=>{
+		this.setState({ edgeType, price }, ()=>{
 			if(this.props.onEdgeTypeChange) {this.props.onEdgeTypeChange(edgeType, this.state)}	
 		})
 		
@@ -163,35 +165,35 @@ class ProductTypeSelector extends Component {
 		} = this.state;
     	return (
     		<div>
-				<div className="form__samples row">
+				<div className='form__samples row'>
 			      {
 			        productTypes.map(product=> (
-			          <div className="col-xs-4" key={product.id}>
-			            <input id={"product-" + product.id} type="radio" name="product_code" className="radio radio--image"
+			          <div className='col-xs-4' key={product.id}>
+			            <input id={'product-' + product.id} type='radio' name='product_code' className='radio radio--image'
 			                   onChange={e=>{this.onProductTypeChange(product)}}
 			                   value={product.id}
 			                   checked={productType === product.id}/>
-			            <label htmlFor={"product-" + product.id}>
+			            <label htmlFor={'product-' + product.id}>
 			              <small>{product.name}</small>
-			              <img src={"/static/img/products/product-" + product.id + '.jpg'} alt="Тип продукта"/>
+			              <img src={'/static/img/products/product-' + product.id + '.jpg'} alt='Тип продукта'/>
 			            </label>
 			          </div>
 			        ))
 			      }
 			    </div>
-			    <div className="form__row">
-			      <a href="#" className="btn btn-block btn-helper" data-toggle="modal" data-target="#samples">Посмотреть
+			    <div className='form__row'>
+			      <a href='#' className='btn btn-block btn-helper' data-toggle='modal' data-target='#samples'>Посмотреть
 			        примеры</a>
 			    </div>
-			    <div className="form__row form__row--size">
-			      <label htmlFor="imgSizing">Размер&nbsp; {
+			    <div className='form__row form__row--size'>
+			      <label htmlFor='imgSizing'>Размер&nbsp; {
 			        showNoteText && (productType !== 'PO') && (
-			          <span className="form__row__note m-text_info">{noteText}</span>
+			          <span className='form__row__note m-text_info'>{noteText}</span>
 			        )
 			      }</label>
-			      <div className="select">
-			        <select id="imgSizing" 
-			        		name="size" required
+			      <div className='select'>
+			        <select id='imgSizing' 
+			        		name='size' required
 			        		value={frameSize}
 			                onChange={this.onFrameSizeChange}>
 			          {sizeOptions.map(o=> (
@@ -202,11 +204,11 @@ class ProductTypeSelector extends Component {
 			    </div>
 			    { 	productType !== 'PO' ? 
 			    	<div>
-						<div className="form__row form__row--frame">
-					      <label htmlFor="imgFrame">Рамка</label>
-					      <div className="select">
-					        <select id="imgFrame" 
-					        		name="frame"
+						<div className='form__row form__row--frame'>
+					      <label htmlFor='imgFrame'>Рамка</label>
+					      <div className='select'>
+					        <select id='imgFrame' 
+					        		name='frame'
 					        		required 
 					        		value={frameType}
 				                	onChange={this.onFrameTypeCahnge}>
@@ -216,11 +218,11 @@ class ProductTypeSelector extends Component {
 					        </select>
 					      </div>
 					    </div>
-					    <div className="form__row form__row--border">
-					      <label htmlFor="imgEdge">Края</label>
-					      <div className="select">
-					        <select id="imgEdge" 
-					        		name="edge" 
+					    <div className='form__row form__row--border'>
+					      <label htmlFor='imgEdge'>Края</label>
+					      <div className='select'>
+					        <select id='imgEdge' 
+					        		name='edge' 
 					        		required
 					        		value={edgeType}
 					                onChange={this.onEdgeTypeChange}>
@@ -233,7 +235,7 @@ class ProductTypeSelector extends Component {
 				    </div>
 				    : null 
 				}
-			    <div className="form__price">{price}<span className="form__price__rouble m-rubble">i</span></div>
+			    <div className='form__price'>{price}<span className='form__price__rouble m-rubble'>i</span></div>
 		    </div>
     	)
 	}
