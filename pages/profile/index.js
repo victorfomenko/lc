@@ -5,29 +5,34 @@ import $http from '../../services/$http'
 
 // components
 import Layout from '../../components/layout';
+import ProductTypeSelector from '../../components/ProductTypeSelector';
 
 export default class Profile extends Layout {
   static async getInitialProps(obj) {
     const props = await super.getInitialProps(obj);
-    const user = props.session.user || null;
-    return {...props, user};
-  }
 
-  componentDidMount() {
-    if(!this.props.user) {
-      this.props.url.replace('/')
+    if(obj.req && !props.session.user) {
+      obj.res.writeHead(302, { Location: '/' })
+      return 
     }
+    else if(!props.session.user) {
+      document.location.pathname = '/'
+      return
+    }
+    return props;    
   }
 
   content() {
-    const {user} = this.props;
+    const {user} = this.props.session;
 
     const page = user ? (
       <div>{JSON.stringify(user)}</div>
       ) : null;
 
     return (
-      page
+      <form>
+        <ProductTypeSelector imageProportion={1.5}/>
+      </form>
     )
   }
 }

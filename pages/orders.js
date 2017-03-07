@@ -8,29 +8,29 @@ import $http from '../services/$http';
 import Layout from '../components/layout';
 
 
-export default class Sorts extends Layout {
+export default class Orders extends Layout {
 	static async getInitialProps(obj) {
-    const [
-      baseProps,
-      orders
-    ] = await Promise.all([
-      super.getInitialProps(obj),
-      $http.post('/ajax/getOrdersInfo.php')
-    ]);
+	    const [
+	      baseProps,
+	      orders
+	    ] = await Promise.all([
+	      super.getInitialProps(obj),
+	      $http.post('/ajax/getOrdersInfo.php')
+	    ]);
 
-    if(obj.req && !baseProps.session.user) {
-    	obj.res.writeHead(302, { Location: '/' })
-    	return 
-    }
-    else if(!baseProps.session.user) {
+	    if(obj.req && !baseProps.session.user) {
+	    	obj.res.writeHead(302, { Location: '/' })
+	    	return 
+	    }
+	    else if(!baseProps.session.user) {
 			document.location.pathname = '/'
 			return
-    }
+	    }
 
-    return {
-      ...baseProps,
-      orders
-    }
+	    return {
+	      ...baseProps,
+	      orders
+	    }
 	}
 
 	constructor(props) {
@@ -84,14 +84,14 @@ export default class Sorts extends Layout {
 		const orders = (this.state.orders || []).map((order, index) => {
 			return (
 				<tr key={index}>
-          <td>{order.name}</td>
-          <td>{order.phone}</td>
-          <td>{order.address}</td>
-          <td>{order.framesize}</td>
-          <td>{order.frametype}</td>
-          <td>{order.price}</td>
-          <td>{order.date}</td>
-      	</tr>
+				<td>{order.date}</td>
+				<td>{order.name}</td>
+				<td>{order.phone}</td>
+				<td>{order.address}</td>
+				<td>{`${order.producttype}-${order.frametype}-${order.framesize}`}</td>
+				<td>{order.price}</td>
+				<td><a href={order.image} target='_blank'>img</a></td>
+				</tr>
 			)
 		})
 
@@ -101,13 +101,13 @@ export default class Sorts extends Layout {
 		        <table className="table table-striped">
 		            <thead>
 			            <tr>
+			            	<th><a href="#" onClick={(e)=>{this.onDateHeaderClick(e, dateSort)}}>Дата заказа</a></th>
 			                <th><a href="#" onClick={(e)=>{this.onNameHeaderClick(e, nameSort)}}>Имя</a></th>
 			                <th>Телефон</th>
 			                <th>Адрес</th>
-			                <th>Размер рамы</th>
-			                <th>Тип рамы</th>
+			                <th>Наименование</th>
 			                <th><a href="#" onClick={(e)=>{this.onPriceHeaderClick(e, priceSort)}}>Цена</a></th>
-			                <th><a href="#" onClick={(e)=>{this.onDateHeaderClick(e, dateSort)}}>Дата заказа</a></th>
+			                <th>Изображение</th>
 			            </tr>
 		            </thead>
 		            <tbody>

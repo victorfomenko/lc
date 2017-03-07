@@ -88,7 +88,7 @@ $whiteFrameColor: #F7FCFF
 	margin: 0 auto
 	vertical-align: bottom
 
-.product--print-only
+.product--PO
 	.product__shadow:after
 		content: ""
 		position: absolute
@@ -104,7 +104,7 @@ $whiteFrameColor: #F7FCFF
 		-ms-transform: rotateZ(3deg)
 		transform: rotateZ(3deg)
 
-.product--canvas
+.product--CP
 	.product__shadow:after
 		@extend .absoluteContent
 		background: url(../img/canvas-texture.png) repeat top left
@@ -170,7 +170,7 @@ $whiteFrameColor: #F7FCFF
 			right: 5px
 
 
-.product--frame
+.product--FP
 	width: 100%
 
 	.product__split
@@ -225,23 +225,23 @@ $whiteFrameColor: #F7FCFF
 	.product__mate
 		display: block !important
 
-.product--canvas .product__frame 
+.product--CP .product__frame 
 	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4), 0 23px 20px rgba(0, 0, 0, 0.2), -10px 3px 18px 3px rgba(0, 0, 0, 0.1)
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.4), 0 23px 20px rgba(0, 0, 0, 0.2), -10px 3px 18px 3px rgba(0, 0, 0, 0.1)
 
-.product--canvas.product--150 .product__frame 
+.product--CP.product--150 .product__frame 
 	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4),	0 15px 20px rgba(0, 0, 0, 0.2),	-5px 3px 18px 3px rgba(0, 0, 0, 0.1)
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.4),	0 15px 20px rgba(0, 0, 0, 0.2),	-5px 3px 18px 3px rgba(0, 0, 0, 0.1)
 
-.product--frame .product__frame 
+.product--FP .product__frame 
 	-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4),0 23px 20px rgba(0, 0, 0, 0.2)
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.4),0 23px 20px rgba(0, 0, 0, 0.2)
 
-.product--frame .product__mate:after 
+.product--FP .product__mate:after 
 	-webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5),inset 2px -2px 5px 2px rgba(0, 0, 0, 0.04)
 	box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5),inset 2px -2px 5px 2px rgba(0, 0, 0, 0.04)
 
-.product--frame.product--630MA .product__mate .product__shadow:after 
+.product--FP.product--630MA .product__mate .product__shadow:after 
 	-webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5)
 	box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5)
 

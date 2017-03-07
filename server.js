@@ -16,10 +16,6 @@ app.prepare()
       return app.render(req, res, '/product', Object.assign({}, req.params, req.query));
     });
 
-    server.get('/profile', (req, res) => {
-      return app.render(req, res, '/profile', Object.assign({}, req.params, req.query));
-    });
-
     server.get('/user', (req, res) => {
       res.redirect('/');
     });

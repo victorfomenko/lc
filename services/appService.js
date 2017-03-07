@@ -107,7 +107,7 @@ api.dataForSent = {
   formEmail: '',
   formPostal: '',
   formProduct: 'CP',
-  formFrameSize: api.optionsList.sizesV[2].value,
+  formFrameSize: api.optionsList.sizesV[1].value,
   formFrameType: '150',
   formBorderType: 'BB',
   formPrice: '',
