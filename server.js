@@ -3,8 +3,6 @@
 const express = require('express');
 const next = require('next');
 const httpProxy = require('http-proxy');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
@@ -14,9 +12,6 @@ app.prepare()
   .then(() => {
     const server = express();
     let apiHost = process.env.API_HOST || 'https://lovecanvas.ru';
-    server.use(cookieParser());
-    server.use(bodyParser.urlencoded({extended: true}));
-    server.use(bodyParser.json());
 
     const proxy = httpProxy.createProxyServer({
       secure: false,
@@ -26,6 +21,12 @@ app.prepare()
       autoRewrite: true,
       protocolRewrite: true,
       cookieDomainRewrite: '*'
+    });
+    proxy.on('proxyReq', function(proxyReq, req, res, options) {
+      if(req.method=="POST"&&req.body){
+        proxyReq.write(req.body);
+        proxyReq.end();
+      }
     });
 
     // custom routing
@@ -53,6 +54,15 @@ app.prepare()
     }
 
     server.use('/ajax/', (req, res)=> {
+      var headers = {};
+      if(req.method=="POST"&&req.body){
+        var data = JSON.stringify(req.body);
+        req.body = data;
+        headers = { 
+          "Content-Type": "application/json",
+          "Content-Length": data.length
+        }
+      }
       proxy.web(req, res, {target: apiHost + '/ajax/'});
     });
 
