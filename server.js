@@ -3,6 +3,8 @@
 const express = require('express');
 const next = require('next');
 const httpProxy = require('http-proxy');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
@@ -12,6 +14,10 @@ app.prepare()
   .then(() => {
     const server = express();
     let apiHost = process.env.API_HOST || 'https://lovecanvas.ru';
+    server.use(cookieParser());
+    server.use(bodyParser.urlencoded({extended: true}));
+    server.use(bodyParser.json());
+
     const proxy = httpProxy.createProxyServer({
       secure: false,
       xfwd: false,
