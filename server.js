@@ -11,7 +11,7 @@ const handle = app.getRequestHandler();
 app.prepare()
   .then(() => {
     const server = express();
-    
+    let apiHost = process.env.API_HOST || 'https://lovecanvas.ru';
     const proxy = httpProxy.createProxyServer({
       secure: false,
       xfwd: false,
@@ -21,7 +21,7 @@ app.prepare()
       protocolRewrite: true,
       cookieDomainRewrite: '*'
     });
-    
+
     // custom routing
     server.get('/gallery/:pictureUrl', (req, res) => {
       return app.render(req, res, '/product', Object.assign({}, req.params, req.query));
@@ -39,21 +39,16 @@ app.prepare()
       res.redirect('/');
     });
 
-    if (!dev) {
-      const apiHost = process.env.API_HOST || 'http://127.0.0.1:3001';
-      server.use('/ajax/', (req, res)=> {
-        proxy.web(req, res, {target: apiHost + '/ajax/'});
-      });
-    }
-    else {
-      const devApiHost = process.env.DEV_API_HOST || 'https://lovecanvas.ru';
-      server.use('/ajax/', (req, res)=> {
-        proxy.web(req, res, {target: devApiHost + '/ajax/'});
-      });
+    if(dev) {
+      apiHost = process.env.DEV_API_HOST || 'https://lovecanvas.ru';
       server.use('/static/data/', (req, res)=> {
-        proxy.web(req, res, {target: devApiHost + '/data/'});
+        proxy.web(req, res, {target: apiHost + '/data/'});
       });
     }
+
+    server.use('/ajax/', (req, res)=> {
+      proxy.web(req, res, {target: apiHost + '/ajax/'});
+    });
 
     // default routing
     server.get('*', (req, res) => {
