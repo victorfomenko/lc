@@ -30,7 +30,6 @@ function Cotroller(picData, onServer) {
     appService.imageProp = calcProportions({ width, height });
     dataForSent.imageBase64 = null;
     dataForSent.image = picData.full;
-    //!onServer && updateMainClass();
   } 
   $scope.imageProportion = appService.imageProp;
   if(appService.imageProp > 1 ) {
