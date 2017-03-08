@@ -63,7 +63,7 @@ app.prepare()
           "Content-Length": data.length
         }
       }
-      proxy.web(req, res, {target: apiHost + '/ajax/'});
+      proxy.web(req, res, {target: apiHost + '/ajax/'}, headers);
     });
 
     // default routing
