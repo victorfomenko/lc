@@ -2,6 +2,7 @@
 
 const express = require('express');
 const next = require('next');
+const httpProxy = require('http-proxy');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
@@ -10,7 +11,7 @@ const handle = app.getRequestHandler();
 app.prepare()
   .then(() => {
     const server = express();
-    const httpProxy = require('http-proxy');
+    
     const proxy = httpProxy.createProxyServer({
       secure: false,
       xfwd: false,
@@ -20,11 +21,7 @@ app.prepare()
       protocolRewrite: true,
       cookieDomainRewrite: '*'
     });
-    const apiHost = process.env.API_HOST || 'http://127.0.0.1:3001';
-    server.use('/ajax/', (req, res)=> {
-      proxy.web(req, res, {target: apiHost + '/ajax/'});
-    });
-
+    
     // custom routing
     server.get('/gallery/:pictureUrl', (req, res) => {
       return app.render(req, res, '/product', Object.assign({}, req.params, req.query));
@@ -42,7 +39,13 @@ app.prepare()
       res.redirect('/');
     });
 
-    if (dev) {
+    if (!dev) {
+      const apiHost = process.env.API_HOST || 'http://127.0.0.1:3001';
+      server.use('/ajax/', (req, res)=> {
+        proxy.web(req, res, {target: apiHost + '/ajax/'});
+      });
+    }
+    else {
       const devApiHost = process.env.DEV_API_HOST || 'https://lovecanvas.ru';
       server.use('/ajax/', (req, res)=> {
         proxy.web(req, res, {target: devApiHost + '/ajax/'});
