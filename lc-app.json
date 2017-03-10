@@ -1,5 +1,7 @@
 {
   "name" : "lc",
   "script" : "server.js",
-  "cwd" : "/var/www/lovecanvas.ru/"
+  "env": {
+    "NODE_ENV": "production"
+  },
 }
