@@ -11,7 +11,7 @@ const handle = app.getRequestHandler();
 app.prepare()
   .then(() => {
     const server = express();
-    let apiHost = process.env.API_HOST || 'http://127.0.0.1:3001';
+    let apiHost = process.env.API_HOST || 'https://lovecanvas.ru';
 
     const proxy = httpProxy.createProxyServer({
       secure: false,

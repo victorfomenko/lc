@@ -36,6 +36,15 @@ export default ({head}) => {
       <meta name="author" content="Victor Fomenko"/>
       <meta name="keywords" content="купить картину, купить принты, принты в казани картины в казани, картина на холсте, картина в раме, печать на холсте, холст, фото, печать, картина, печать картин"/>
       <meta name="description" content="Продажа картин. Создание высококачественных картин. С Love Canvas вы можете превратить свою фотографию в картину."/>
+
+      {/* BEGIN JIVOSITE CODE {literal} */}
+      <script dangerouslySetInnerHTML={{__html: `(function(){ var widget_id = 'KGBOISDYED'; var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();` }} />
+      {/* {/literal} END JIVOSITE CODE */}
+
+      {/* Yandex.Metrika counter */}
+      <script dangerouslySetInnerHTML={{__html: `(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter26717241 = new Ya.Metrika({ id:26717241, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");` }} />
+      <noscript dangerouslySetInnerHTML={{__html: `<div><img src="https://mc.yandex.ru/watch/26717241" style="position:absolute; left:-9999px;" alt="" /></div>`}} />
+      {/* Yandex.Metrika counter */}
     </Head>
   );
 }

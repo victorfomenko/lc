@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Initializer as YM} from 'react-yandex-metrika';
 import cookie from 'cookie';
 
 //services
@@ -26,12 +25,6 @@ export default class Layout extends Component {
     return {path: pathname, head: {}, session: {id: sid, user}}
   }
 
-  componentDidMount() {
-    if (process.env.NODE_ENV === 'production') {
-      ym.init([26717241], { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true });
-    }
-  }
-
   render() {
     const {path, session, head} = this.props;
     return (
@@ -43,7 +36,6 @@ export default class Layout extends Component {
         </div>
         <Footer/>
         <Modals user={session.user}/>
-        <YM />
       </div>
     )
   }
