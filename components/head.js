@@ -28,9 +28,14 @@ export default ({head}) => {
 
   return (
     <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="shortcut icon" href="favicon.ico?v=3" />
       <title>{title + (title ? ' | ' : '') + 'Love Canvas'}</title>
       <link href="/static/css/main.css" rel="stylesheet"/>
       {scripts.map((src, i)=> <script key={i} src={src}/>)}
+      <meta name="author" content="Victor Fomenko"/>
+      <meta name="keywords" content="купить картину, купить принты, принты в казани картины в казани, картина на холсте, картина в раме, печать на холсте, холст, фото, печать, картина, печать картин"/>
+      <meta name="description" content="Продажа картин. Создание высококачественных картин. С Love Canvas вы можете превратить свою фотографию в картину."/>
     </Head>
   );
 }

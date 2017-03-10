@@ -21,7 +21,8 @@
     "lodash": "^4.17.4",
     "next": "^2.0.0-beta",
     "node-sass": "^4.4.0",
-    "react-bootstrap": "^0.30.7"
+    "react-bootstrap": "^0.30.7",
+    "react-yandex-metrika": "^1.1.0"
   },
   "peerDependencies": {
     "react": "^15.4.1",
