@@ -22,12 +22,6 @@ app.prepare()
       protocolRewrite: true,
       cookieDomainRewrite: '*'
     });
-    proxy.on('proxyReq', function(proxyReq, req, res, options) {
-      if(req.method=="POST"&&req.body){
-        proxyReq.write(req.body);
-        proxyReq.end();
-      }
-    });
 
     // custom routing
     server.get('/gallery/:pictureUrl', (req, res) => {
@@ -54,16 +48,7 @@ app.prepare()
     }
 
     server.use('/ajax/', (req, res)=> {
-      var headers = {};
-      if(req.method=="POST"&&req.body){
-        var data = JSON.stringify(req.body);
-        req.body = data;
-        headers = { 
-          "Content-Type": "application/json",
-          "Content-Length": data.length
-        }
-      }
-      proxy.web(req, res, {target: apiHost + '/ajax/'}, headers);
+      proxy.web(req, res, {target: apiHost + '/ajax/'});
     });
 
     // default routing

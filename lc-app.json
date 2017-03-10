@@ -1,0 +1,5 @@
+{
+  "name" : "lc",
+  "script" : "server.js",
+  "cwd" : "/var/www/lovecanvas.ru/"
+}
