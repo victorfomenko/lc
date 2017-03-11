@@ -79,7 +79,7 @@ export default ({path, user}) => {
             </ul>
           </div>
           <div className="header__flex__item col-md-3 col-xs-3 m-text_right header__flex__item--contacts m-padding-right_clear">
-            <span className="header__flex__item__phone"><a href="tel:+79274440045">+7 (906) 323-96-38</a></span> <br/>
+            <span className="header__flex__item__phone"><a href="tel:+79063239638">+7 (906) 323-96-38</a></span> <br/>
             <div className="m-text_right">
               {userPanel}
             </div>
