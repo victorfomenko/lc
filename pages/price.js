@@ -5,6 +5,12 @@ import Layout from '../components/layout';
 import appService from '../services/appService';
 
 export default class Price extends Layout {
+  static async getInitialProps(obj) {
+    const props = await super.getInitialProps(obj);
+    props.head.title = 'Цены';
+    return props
+  }
+
   _getInitialState() {
     var dataForSent = appService.dataForSent;
     var formListOptions = appService.optionsList;

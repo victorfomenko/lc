@@ -1,4 +1,7 @@
 User-agent: *
+
+Host: https://lovecanvas.ru
+
 Disallow: /*?sort=
 
 Disallow: /*&sort=
@@ -34,6 +37,9 @@ Disallow: /lovecanvas.ru/shipping
 
 
 User-agent: Yandex
+
+Host: https://lovecanvas.ru
+
 Disallow: /system
 
 Disallow: /*?sort=

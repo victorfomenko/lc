@@ -3,6 +3,13 @@ import React from 'react';
 import Layout from '../components/layout';
 
 export default class Delivery extends Layout {
+
+  static async getInitialProps(obj) {
+    const props = await super.getInitialProps(obj);
+    props.head.title = 'Доставка';
+    return props
+  }
+
   content(){
     return(
       <div className="delivery delivery--bg">
