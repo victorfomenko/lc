@@ -38,8 +38,6 @@ Disallow: /lovecanvas.ru/shipping
 
 User-agent: Yandex
 
-Host: https://lovecanvas.ru
-
 Disallow: /system
 
 Disallow: /*?sort=
