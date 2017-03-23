@@ -90,7 +90,11 @@ class ProductTypeSelector extends Component {
 	onFrameSizeChange(e){
 		const frameSize = e.target.value;
 		const [ width, height ] = frameSize.split('|');
-		const price = appService.calcPrice(width, height, this.state.productType, this.state.frameType)
+		let price = appService.calcPrice(width, height, this.state.productType, this.state.frameType)
+		if(this.state.productType == 'FP'){
+			price = appService.calcPrice(width, height, this.state.productType, this.state.edgeType)
+		}
+		
 
 		this.setState({ frameSize, price }, ()=>{
 			if(this.props.onFrameSizeChange) {this.props.onFrameSizeChange(frameSize, this.state)}

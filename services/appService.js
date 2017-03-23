@@ -121,22 +121,28 @@ api.dataForSent = {
 api.imageProp = 1.5; //default horizontal prop
 api.calcPrice = function (width, height, productType, borderType) {
   if (!productType || !width || !height) return;
+  width = Number(width);
+  height = Number(height);
+
   var price = 0;
-  var canvasBackstretch = 8, // запас для натяжки на подрамник
+  var canvasBackstretch = 10, // запас для натяжки на подрамник
     frameSizeSquare = (width * height) / 10000,
     frameCanvasSizeSquare = ((width * 1 + canvasBackstretch) * (height * 1 + canvasBackstretch)) / 10000,
     frameSizeSquareInner = ((width - 3) * (height - 3)) / 10000,
     frameLength = (width * 2 + height * 2) / 100,
-    POCoast = 1200,
-    CPCoast = 1200,
-    FPCoast = 1200,
+    POCoast = 1500,
+    CPCoast = 1500,
+    FPCoast = 400,
     mounts = 60,
-    underFrameCoast1 = 70,
+    boxing = 50, // упаковка. цена за метр
+    assembly = 85, // сборка. цена за метр
+    underFrameCoast1 = 100,
     underFrameCoast2 = 160,
-    frameCoast = 250,
-    penokartonCoast = 310,
-    paspartuCoast = 600,
-    glassCoast = 1000;
+    frameCoast = 790,
+    penokartonCoast = 300,
+    paspartuCoast = 557,
+    glassCoast = 650;
+
   //calculate if print only
   if (productType === "PO" && !borderType) {
     price = 2 * Math.round((frameSizeSquare * POCoast) / 10) * 10 + 100;
@@ -154,8 +160,19 @@ api.calcPrice = function (width, height, productType, borderType) {
         underFrameCoast = underFrameCoast2;
         break;
     }
-    price = frameCanvasSizeSquare * CPCoast + (width * 1 + height * 1) * underFrameCoast / 50 + mounts;
-    price = 2 * Math.round(price / 10) * 10 + 100; // add 100% and 100 rub for deals
+    const printPrice =      frameCanvasSizeSquare * CPCoast;
+    const underFramePrice = frameLength * underFrameCoast;
+    const buildPrice = frameLength * assembly;
+    const primeCoast = printPrice + underFramePrice + buildPrice + boxing; // Себестоимость
+    price = primeCoast*1.1; // накрутка 10% по умолчанию
+    
+    if(width + height === 100){
+      price = primeCoast*1.2;  // накрутка 20% для размеров 40x60
+    }
+    else if(width + height === 60){
+      price = primeCoast*1.6;  // накрутка 60% для размеров 30x30
+    }
+    price = Math.round(price / 1) * 1; // Round
 
   }
   //calculate if frame print
@@ -163,8 +180,21 @@ api.calcPrice = function (width, height, productType, borderType) {
     if (borderType === 'NOMA') {
       paspartuCoast = 0
     }
-    price = frameSizeSquareInner * FPCoast + frameSizeSquareInner * glassCoast + frameLength * frameCoast + frameSizeSquareInner * paspartuCoast + frameSizeSquareInner * penokartonCoast + mounts;
-    price = 2 * Math.round(price / 10) * 10 + 100;// add 100% and 100 rub for deals
+    const printPrice = frameSizeSquareInner * FPCoast;
+    const framePrice = frameLength * frameCoast;
+    const glassPrice = frameSizeSquareInner * glassCoast;
+    const buildPrice = frameLength * assembly;
+    const paspartuPrice = frameSizeSquareInner * paspartuCoast;
+    const penokartonPrice = frameSizeSquareInner * penokartonCoast;
+    const primeCoast = printPrice + framePrice + glassPrice + paspartuPrice + penokartonPrice + buildPrice + boxing;
+    price = primeCoast;
+    price = primeCoast*1.6; // накрутка 60% по умолчанию
+    
+    if(width + height === 60 || width + height === 175){
+      price = primeCoast*1.8;  // накрутка 80% для размеров 30x30 и 75x100
+    }
+
+    price = Math.round(price / 1) * 1; // Round
 
   }
   return price;
