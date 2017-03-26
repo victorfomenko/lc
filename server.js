@@ -8,6 +8,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
 
+const api = require('./api');
+
 app.prepare()
   .then(() => {
     const server = express();
@@ -23,7 +25,14 @@ app.prepare()
       cookieDomainRewrite: '*'
     });
 
-    // custom routing
+    if (process.env.PROXY_API) {
+      server.use('/api', (req, res)=> {
+        proxy.web(req, res, {target: 'http://localhost:3030'});
+      });
+    } else {
+      server.use('/api', api);
+    }
+    
     server.get('/gallery/:pictureUrl', (req, res) => {
       return app.render(req, res, '/product', Object.assign({}, req.params, req.query));
     });
