@@ -133,7 +133,6 @@ api.calcPrice = function (width, height, productType, borderType) {
     POCoast = 1500,
     CPCoast = 1500,
     FPCoast = 400,
-    mounts = 60,
     boxing = 50, // упаковка. цена за метр
     assembly = 85, // сборка. цена за метр
     underFrameCoast1 = 100,
