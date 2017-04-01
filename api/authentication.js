@@ -2,6 +2,7 @@
 
 const authentication = require('feathers-authentication');
 const jwt = require('feathers-authentication-jwt');
+const feathersErrors = require('feathers-errors');
 
 const oauth2 = require('feathers-authentication-oauth2');
 
@@ -12,7 +13,7 @@ const providerStrategies = {
   vkontakte: require('passport-vkontakte').Strategy,
 };
 
-module.exports = function() {
+module.exports = function () {
   const app = this;
   const config = app.get('authentication');
   const providers = config.oauth.providers;
@@ -20,7 +21,18 @@ module.exports = function() {
   // Set up authentication with the secret
   app.configure(authentication(config));
   app.configure(jwt({
-    jwtFromRequest: req=> req.cookies[app.get('auth').cookie.name]
+    jwtFromRequest: req => req.cookies[app.get('auth').cookie.name],
+    Verifier: class CustomVerifier extends jwt.Verifier {
+      verify(req, payload, done) {
+        super.verify(req, payload, function (err, user) {
+          if (!err && (!user || !user.id)) {
+            return done(new feathersErrors.NotAuthenticated(`user "${payload.userId}" not found`));
+          }
+
+          done(err, user);
+        })
+      }
+    }
   }));
 
   // optionally authenticate before use oauth strategies, but it not correct work
@@ -37,7 +49,7 @@ module.exports = function() {
   //     .catch(next);
   // });
 
-  Object.keys(providers).forEach(providerName=> {
+  Object.keys(providers).forEach(providerName => {
     if (providerStrategies[providerName]) {
       app.configure(oauth2(Object.assign({
         name: providerName,
