@@ -34,7 +34,7 @@ export default ({path, user}) => {
         <div>
           <AjaxForm className="ajax" method="post" action="/ajax/ajax.php">
             <input type="hidden" name="act" value="logout"/>
-            <ParamLink url='/user/:userUrl' params={{userUrl: currentUser.url}} title={currentUser.name}/>
+            <ParamLink url='/account' title={currentUser.name}/>
             <button className="btn btn-link header__flex__item__email" type="submit">выход</button>
           </AjaxForm>
         </div>
@@ -45,7 +45,7 @@ export default ({path, user}) => {
         <div>
           <AjaxForm className="ajax" method="post" action="/ajax/ajax.php">
             <input type="hidden" name="act" value="logout"/>
-            <span>admin: <ParamLink url='/user/:userUrl' params={{userUrl: currentUser.url}} title={currentUser.name}/></span>
+            <span>admin: <ParamLink url='/account' title={currentUser.name}/></span>
             <button className="btn btn-link header__flex__item__email" type="submit">выход</button>
           </AjaxForm>
         </div>
