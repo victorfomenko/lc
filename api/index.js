@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 'use strict';
 
+require('dotenv').config();
+
 const logger = require('winston');
 const app = require('./app');
-const port = app.get('port');
+const port = app.get('serverPort');
 const server = app.listen(port);
 
 process.on('unhandledRejection', (reason, p) =>
