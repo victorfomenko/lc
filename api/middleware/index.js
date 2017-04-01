@@ -10,5 +10,5 @@ module.exports = function() {
   const app = this;
 
   app.use(notFound());
-  app.use(handler());
+  app.use(handler({html:false}));
 };
