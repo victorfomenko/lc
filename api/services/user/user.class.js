@@ -26,9 +26,9 @@ class Service {
   //   return Promise.resolve(data);
   // }
 
-  patch(id, data, params) {
-    return Promise.resolve(data);
-  }
+  // patch(id, data, params) {
+  //   return Promise.resolve(data);
+  // }
 
   // remove(id, params) {
   //   return Promise.resolve({ id });

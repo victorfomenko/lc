@@ -126,7 +126,7 @@ export default class AccountEdit extends Layout {
                     </p>
                 </div>
             </div>
-            <AjaxForm action={`/api/user/${user.id}`} method='PATCH' className='form ajax'>
+            <AjaxForm action={`/api/users/${user.id}`} method='PATCH' className='form ajax'>
                 <h2 className='h2'>Информация о профиле</h2>
                 <div>
                     <label htmlFor='url' className='form__row__label--title'>Имя пользователя</label>
