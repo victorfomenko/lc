@@ -4,6 +4,7 @@ import cookie from 'cookie';
 //services
 import auth from '../services/authService';
 import $http from '../services/$http';
+import app from '../services/app';
 
 // components
 import Head from './head';
@@ -18,10 +19,11 @@ export default class Layout extends Component {
     }
 
     const cookies = cookie.parse(req ? (req.headers.cookie || '') : document.cookie);
-    const sid = cookies['PHPSESSID'];
+    const sid = cookies['sid'];
 
-    const user = await auth.getProfile(sid);
-
+    // const user = await auth.getProfile(sid);
+    const user = await app.service('user').find({sid}).catch(e=> null);
+    
     return {path: pathname, head: {}, session: {id: sid, user}}
   }
 
@@ -40,4 +42,3 @@ export default class Layout extends Component {
     )
   }
 }
-

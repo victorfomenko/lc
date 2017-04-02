@@ -21,7 +21,9 @@ module.exports = function () {
   // Set up authentication with the secret
   app.configure(authentication(config));
   app.configure(jwt({
-    jwtFromRequest: req => req.cookies[app.get('auth').cookie.name],
+    jwtFromRequest: req => {
+      return req.cookies[config.cookie.name]
+    },
     Verifier: class CustomVerifier extends jwt.Verifier {
       verify(req, payload, done) {
         super.verify(req, payload, function (err, user) {

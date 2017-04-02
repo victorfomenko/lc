@@ -6,7 +6,7 @@
   "scripts": {
     "api": "SERVER_PORT=3030 node api/index.js",
     "web": "API_PORT=3030 node web.js",
-    "dev": "npm run web & npm run api & wait",
+    "dev": "API_HOST=http://localhost:3000 && npm run web & npm run api & wait",
     "build": "next build",
     "start": "NODE_ENV=production npm run web & npm run api & wait"
   },
@@ -19,6 +19,8 @@
     "dotenv": "^4.0.0",
     "es6-promise": "^4.0.5",
     "express": "^4.14.1",
+    "feathers": "^2.1.1",
+    "feathers-rest": "^1.7.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "lovecanvas-api": "./api",
