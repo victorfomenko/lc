@@ -22,9 +22,7 @@ export default class Account extends Layout {
       return
     }
 
-    const user = await $http.post('/ajax/getArtistInfo.php', props.session.user.url);
-
-    return {...props, user};    
+    return props;
   }
 
   constructor(props) {
@@ -32,7 +30,7 @@ export default class Account extends Layout {
   }
 
   content() {
-    const { about, avatar, name, website, pictures } = this.props.user
+    const { about, avatar, name, website, pictures } = this.props.session.user
 
     return (
       <UserAccountLayout path={this.props.path}>

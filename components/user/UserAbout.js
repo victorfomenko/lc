@@ -10,7 +10,7 @@ const UserAbout = (props) => {
   return (
     <div className="row">
       <div className="col-xs-6 col-sm-2 col-md-3 col-lg-2 m-text_center">
-        <img className="artist__avatar user-avatar" src={"/static/data/avatars/" + avatar}
+        <img className="artist__avatar user-avatar" src={avatar}
              alt={name}
              title={name}/>
         {

@@ -21,16 +21,14 @@ export default class AccountEdit extends Layout {
       return
     }
 
-    const user = await $http.post('/ajax/getArtistInfo.php', props.session.user.url);
-
-    return {...props, user};
+    return props;
   }
 
   constructor(props) {
     super(props);
     this.state = {
       isHidden: true,
-      user: this.props.user
+      user: this.prepareUserValues(this.props.session.user)
     }
     this.onChangeUrl = this.onChangeUrl.bind(this);
     this.onChangeName = this.onChangeName.bind(this);
@@ -38,6 +36,15 @@ export default class AccountEdit extends Layout {
     this.onChangePhone = this.onChangePhone.bind(this);
     this.onChangeAbout = this.onChangeAbout.bind(this);
     this.onChangeWebsite = this.onChangeWebsite.bind(this);
+  }
+
+  prepareUserValues(user = {}){
+    for(const key in user){
+      if(user.hasOwnProperty(key)){
+        user[key] = user[key] ? user[key] : ''
+      }
+    }
+    return user
   }
 
   onChangeUrl(e){
@@ -105,41 +112,41 @@ export default class AccountEdit extends Layout {
             <h2 className='h2'>Аватар</h2>
             <div className='media dz m-margin-bottom_small'>
                 <div className='media__aside'>
-                    <div className={`dz-original-avatar${!isHidden ? 'm-hidden' : ''}`}>
-                        <img className='user-avatar' src={`/static/data/avatars/${user.avatar}`} alt={user.name} title={user.name}/>
+                    <div className={`dz-original-avatar ${!isHidden ? 'm-hidden' : ''}`}>
+                        <img className='user-avatar' src={user.avatar} alt={user.name} title={user.name}/>
                     </div>
                     <div className='dropzone-previews dz-preview'></div>
                 </div>
                 <div className='media__body' id='dz-actions'>
-                    <button className={`btn btn-lg btn-helper dz-select${!isHidden ? 'm-hidden' : ''}`}>Изменить фото</button>
-                    <button className={`btn btn-lg btn-info dz-start${isHidden ? 'm-hidden' : ''}`}>Применить</button>
-                    <button className={`btn btn-lg btn-helper dz-cancel${isHidden ? 'm-hidden' : ''}`}>Отмена</button>
+                    <button className={`btn btn-lg btn-helper dz-select ${!isHidden ? 'm-hidden' : ''}`}>Изменить фото</button>
+                    <button className={`btn btn-lg btn-info dz-start ${isHidden ? 'm-hidden' : ''}`}>Применить</button>
+                    <button className={`btn btn-lg btn-helper dz-cancel ${isHidden ? 'm-hidden' : ''}`}>Отмена</button>
                     <p>
                       <small>Это фото является публичным.</small>
                     </p>
                 </div>
             </div>
-            <AjaxForm action='/ajax/ajax.php' method='post' className='form ajax'>
+            <AjaxForm action={`/api/user/${user.id}`} method='PATCH' className='form ajax'>
                 <h2 className='h2'>Информация о профиле</h2>
                 <div>
-                    <label htmlFor='urlname' className='form__row__label--title'>Имя пользователя</label>
+                    <label htmlFor='url' className='form__row__label--title'>Имя пользователя</label>
                     <div className='form__row form__row--prefix'>
                         <span className='form__row--prefix__label'>https://lovecanvas.ru/</span>
-                        <input id='urlname' type='text' className='input-block-level form__row--prefix--love' placeholder='имя' disabled />
-                        <input type='hidden' name='urlname' value={user.url} onChange={this.onChangeUrl} />
+                        <input id='url' type='text' className='input-block-level form__row--prefix--love' placeholder={user.url} disabled />
+                        <input type='hidden' name='url' value={user.url} onChange={this.onChangeUrl} />
                         <small>Данное имя пользователя даёт вам уникальную ссылку на ваш профиль, которую вы можете давать вашим знакомым и друзьям. Эта ссылка не может быть изменена.</small>
                     </div>
                 </div>
                 <div className='form__row form__row--is_required'>
-                    <label className='form__row__label--title' htmlFor='username'>Отображаемое имя</label>
-                    <input name='username' id='username' type='text' value={user.name} onChange={this.onChangeName}/>
+                    <label className='form__row__label--title' htmlFor='name'>Отображаемое имя</label>
+                    <input name='name' id='name' type='text' value={user.name} onChange={this.onChangeName} required/>
                     <span className='m-text_error'></span>
                 </div>
                 <div className='row'>
                     <div className='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
                         <div className='form__row form__row--is_required'>
                             <label className='form__row__label--title' htmlFor='email'>Email</label>
-                            <input name='email' id='email' type='email' value={user.email} onChange={this.onChangeEmail}/>
+                            <input name='email' id='email' type='email' value={user.email} onChange={this.onChangeEmail} required/>
                             <span className='m-text_error'></span>
                         </div>
                     </div>
@@ -155,12 +162,11 @@ export default class AccountEdit extends Layout {
                     <textarea name='about' id='about' cols='30' rows='6' value={user.about} onChange={this.onChangeAbout}></textarea>
                 </div>
                 <div className='form__row'>
-                    <label className='form__row__label--title' htmlFor='username'>Сайт</label>
+                    <label className='form__row__label--title' htmlFor='name'>Сайт</label>
                     <input name='website' id='website' type='text' value={user.website} onChange={this.onChangeWebsite}/>
                 </div>
                 <div className='form__row'>
-                    <input type='hidden' name='userid' value={user.id} />
-                    <input type='hidden' name='act' value='profileSave' />
+                    <input type="hidden" name="act" value="profileSave" />
                     <button className='btn btn-info btn-lg' type='submit'>Сохранить</button>
                 </div>
                 <div className='info info--success info--hide'>&nbsp;</div>
