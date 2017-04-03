@@ -11,7 +11,7 @@ import ParamLink from '../components/paramLink';
 import ProductTypeSelector from '../components/ProductTypeSelector';
 import ProductPreview from '../components/ProductPreview';
 
-function Cotroller(picData, onServer) {
+function Cotroller(picData) {
   var $scope = {};
   var productModefierPrefix = 'product--';
   var dataForSent = appService.dataForSent;
@@ -113,8 +113,7 @@ export default class ProductPage extends Layout {
     return {
       ...baseProps,
       picture,
-      pictureUrl,
-      onServer: !!req
+      pictureUrl
     }
   }
 
@@ -125,7 +124,7 @@ export default class ProductPage extends Layout {
   constructor(...args) {
     super(...args);
     try {
-      this.$scope = Cotroller(this.props.picture || {}, this.props.onServer);
+      this.$scope = Cotroller(this.props.picture || {});
     } catch (e) {
       console.error(e.stack)
     }
