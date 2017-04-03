@@ -104,8 +104,10 @@ class ProductTypeSelector extends Component {
 	onFrameTypeCahnge(e){
 		const frameType = e.target.value;
 		const [ width, height ] = this.state.frameSize.split('|');
-		const price = appService.calcPrice(width, height, this.state.productType, frameType)
-
+		let price = appService.calcPrice(width, height, this.state.productType, frameType)
+		if(this.state.productType == 'FP'){
+			price = appService.calcPrice(width, height, this.state.productType, this.state.edgeType)
+		}
 		this.setState({ frameType, price }, () => {
 			if(this.props.onFrameTypeCahnge) {this.props.onFrameTypeCahnge(frameType, this.state)}
 		})
