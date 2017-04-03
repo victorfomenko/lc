@@ -29,7 +29,7 @@ export default ({head}) => {
   return (
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="shortcut icon" href="favicon.ico?v=3" />
+      <link rel="shortcut icon" href="/static/favicon.ico?v=3" />
       <title>{title + (title ? ' | ' : '') + 'Love Canvas'}</title>
       <link href="/static/css/main.css" rel="stylesheet"/>
       {scripts.map((src, i)=> <script key={i} src={src}/>)}
