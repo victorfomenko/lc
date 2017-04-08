@@ -93,5 +93,7 @@ fabric.properties
 
 /.next/
 
+/static/uploads
+
 # contributors recomendation of package dotenv(https://www.npmjs.com/package/dotenv#should-i-commit-my-env-file)
 /.env

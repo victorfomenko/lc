@@ -1,3 +1,5 @@
+const path = require('path');
+
 const port = process.env.PORT || 3000;
 const serverPort = process.env.SERVER_PORT || port;
 
@@ -9,6 +11,9 @@ module.exports = {
   paginate: {
     default: 50,
     max: 100
+  },
+  upload: {
+    dir: path.normalize(process.env.UPLOAD_DIR || __dirname + '/../../static/uploads')
   },
   authentication: {
     secret: 'my secret :)',

@@ -1,0 +1,21 @@
+<h1>Test form for upload file</h1>
+
+<form action="/api/uploads" method="POST" enctype="multipart/form-data">
+  <label>
+    type (type of file: avatar, picture...)
+    <select name="type">
+      <option value="avatar">avatar</option>
+      <option value="picture-preview">picture-preview</option>
+      <option value="picture-original">picture-original</option>
+    </select>
+  </label>
+  <br/>
+  <label>
+    file
+    <input name="uri" type="file">
+  </label>
+  <p>
+    optionally you should send file name as "name" property if you send file in base64 format
+  </p>
+  <input type="submit">
+</form>
