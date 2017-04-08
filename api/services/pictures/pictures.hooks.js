@@ -1,10 +1,10 @@
 'use strict';
 
-
+const { hooks: { addRelations } } = require('../../models/picture.model.js');
 
 module.exports = {
   before: {
-    all: [],
+    all: [addRelations],
     find: [],
     get: [],
     create: [],

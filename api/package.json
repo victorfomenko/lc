@@ -46,6 +46,9 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
-    "pg": "^6.1.5"
+    "pg": "^6.1.5",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.3",
+    "transliteration": "^1.5.3"
   }
 }
