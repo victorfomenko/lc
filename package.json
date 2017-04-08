@@ -26,9 +26,7 @@
     "lovecanvas-api": "./api",
     "next": "^2.0.0",
     "node-sass": "^4.4.0",
-    "react-bootstrap": "^0.30.7"
-  },
-  "peerDependencies": {
+    "react-bootstrap": "^0.30.7",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   },
