@@ -1,6 +1,6 @@
 User-agent: *
 
-Host: https://lovecanvas.ru
+Host: http://lovecanvas.ru
 
 Disallow: /*?sort=
 

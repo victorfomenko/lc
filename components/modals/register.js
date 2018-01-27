@@ -17,7 +17,7 @@ export default ()=>{
               <h1 className="form-signup-heading">Регистрация</h1>
 
               <div className="form__row form__row--is_required form__row--prefix">
-                <span className="form__row--prefix__label">https://lovecanvas.ru/</span>
+                <span className="form__row--prefix__label">http://lovecanvas.ru/</span>
                 <input name="urlname" type="text" className="input-block-level form__row--prefix--love" placeholder="имя" autoFocus/>
                   <span className="m-text_error"/>
                   <div>

@@ -11,7 +11,7 @@ const handle = app.getRequestHandler();
 app.prepare()
   .then(() => {
     const server = express();
-    let apiHost = process.env.API_HOST || 'https://lovecanvas.ru';
+    let apiHost = process.env.API_HOST || 'http://lovecanvas.ru';
 
     const proxy = httpProxy.createProxyServer({
       secure: false,
@@ -41,7 +41,7 @@ app.prepare()
     });
 
     if(dev) {
-      apiHost = process.env.DEV_API_HOST || 'https://lovecanvas.ru';
+      apiHost = process.env.DEV_API_HOST || 'http://lovecanvas.ru';
       server.use('/static/data/', (req, res)=> {
         proxy.web(req, res, {target: apiHost + '/static/data/'});
       });
